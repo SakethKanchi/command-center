@@ -1,4 +1,6 @@
-import { type AppError, toAppError } from "@server/infra/errors";
+import { getConfig } from "@server/infra/config";
+import { type AppError, toAppError, toPublicError } from "@server/infra/errors";
+import { logger } from "@server/infra/logger";
 import type { Context } from "hono";
 
 /**
@@ -19,11 +21,9 @@ export function failure(c: Context, error: AppError) {
   return c.json<ApiResponse<never>>(
     {
       ok: false,
-      error: {
-        code: error.code,
-        message: error.message,
-        ...(error.details === undefined ? {} : { details: error.details }),
-      },
+      error: toPublicError(error, {
+        redactInternal: getConfig().isProduction,
+      }),
     },
     error.status as 400,
   );
@@ -34,7 +34,21 @@ export function failure(c: Context, error: AppError) {
  *
  * Registered once as Hono's `onError`, so a route body can throw `notFound(...)`
  * and get the right status without a try/catch in every handler.
+ *
+ * An `INTERNAL` is a bug rather than a rejected request, and production hides
+ * its text from the client, so it is logged here with the message and stack
+ * that the response no longer carries. Without this the redaction would turn a
+ * crash into silence.
  */
 export function respondWithError(error: unknown, c: Context) {
-  return failure(c, toAppError(error));
+  const appError = toAppError(error);
+  if (appError.code === "INTERNAL") {
+    logger.error("Unhandled server error", {
+      method: c.req.method,
+      path: c.req.path,
+      message: appError.message,
+      stack: appError.stack,
+    });
+  }
+  return failure(c, appError);
 }

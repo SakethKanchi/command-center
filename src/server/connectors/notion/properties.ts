@@ -191,7 +191,10 @@ function databaseSpec(kind: ConnectorEntityKind): {
   return {
     title: LANE_TITLES[kind],
     properties: Object.fromEntries(
-      NOTION_COLUMNS[kind].map((column) => [column.name, schemaFor(column.type)]),
+      NOTION_COLUMNS[kind].map((column) => [
+        column.name,
+        schemaFor(column.type),
+      ]),
     ),
   };
 }
@@ -294,7 +297,9 @@ function readColumns<TRow>(
  * One row as neutral column values, in schema order. This is the single
  * rendering point: both transports start here.
  */
-export function notionColumnValues(row: CommandCenterRow): NotionPropertyValue[] {
+export function notionColumnValues(
+  row: CommandCenterRow,
+): NotionPropertyValue[] {
   switch (row.kind) {
     case "opportunity":
       return readColumns(row, OPPORTUNITY_COLUMNS);
@@ -307,7 +312,9 @@ export function notionColumnValues(row: CommandCenterRow): NotionPropertyValue[]
   }
 }
 
-function richText(value: string | number | boolean | null): NotionRichTextPayload[] {
+function richText(
+  value: string | number | boolean | null,
+): NotionRichTextPayload[] {
   const content = value === null ? "" : String(value);
   if (content === "") return [];
   return [{ type: "text", text: { content } }];

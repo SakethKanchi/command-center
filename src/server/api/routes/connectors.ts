@@ -78,24 +78,27 @@ export function createConnectorRoutes(deps: ApiDeps): Hono {
           const message =
             error instanceof Error ? error.message : String(error);
           logger.warn("Connector health probe failed", { provider, message });
-          return {
+          const errorRow: ConnectorHealth = {
             provider,
             accountKey: "default",
             connected: false,
-            status: "error" as const,
+            status: "error",
             target: null,
             destinationUrl: null,
             lastSyncedAt: null,
             lastError: message,
-            // `null` when neither transport is set up. Defaulting to
+            // Omitted when neither transport is set up. Defaulting to
             // "direct" here would have the card offer a transport the
             // provider does not have, which is the dead end the UI now
-            // avoids by branching on this field.
-            authMode: providerAuthMode(provider, { repos: deps.repos }),
-            linkState: "none" as const,
+            // avoids by branching on this field. Annotated so a drift
+            // between this row and `ConnectorHealth` fails the build.
+            authMode:
+              providerAuthMode(provider, { repos: deps.repos }) ?? undefined,
+            linkState: "none",
             connectedAccountId: null,
             setupHint: null,
           };
+          return errorRow;
         }
       }),
     );

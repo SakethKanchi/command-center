@@ -1,3 +1,6 @@
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import type {
   Connector,
   ConnectorAdapterContext,
@@ -15,6 +18,7 @@ import { hashRow, renderRow, SHEET_TABS } from "../sheets/layout";
 import {
   COMPOSIO_API_BASE,
   clearComposioAuthConfigCache,
+  clearComposioSessionCache,
   createComposioClient,
 } from "./client";
 import {
@@ -202,7 +206,13 @@ const AUTH_CONFIG = { id: "ac_123", toolkit_slug: "gmail", name: "Gmail" };
 
 beforeEach(() => {
   clearComposioAuthConfigCache();
+  clearComposioSessionCache();
   vi.unstubAllEnvs();
+  // The client now falls back to the Composio CLI's own credential file, so a
+  // developer who has run `composio login` would otherwise have a real key
+  // leak into "no key is configured". Point the lookup at a directory that
+  // holds nothing, so these tests answer the same on every machine and in CI.
+  vi.stubEnv("COMPOSIO_CACHE_DIR", mkdtempSync(join(tmpdir(), "composio-")));
 });
 
 afterEach(() => {

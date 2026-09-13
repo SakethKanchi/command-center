@@ -244,7 +244,9 @@ export function AddButton({
 /**
  * One section of the form. `h2` on every one of them, in document order, so
  * the page outline under the single `h1` is the list of things a profile is
- * made of.
+ * made of, and the heading names the section as a landmark — several sections
+ * repeat a field label ("Location", "Start"), so the section is what tells
+ * one "Location" from another.
  */
 export function Section({
   title,
@@ -255,10 +257,13 @@ export function Section({
   note?: string;
   children: ReactNode;
 }) {
+  const headingId = `profile-section-${title.toLowerCase().replace(/\s+/g, "-")}`;
   return (
-    <section className="panel overflow-hidden">
+    <section className="panel overflow-hidden" aria-labelledby={headingId}>
       <header className="border-b border-ridge px-4 py-2.5">
-        <h2 className="u-meta text-ink-dim">{title}</h2>
+        <h2 id={headingId} className="u-meta text-ink-dim">
+          {title}
+        </h2>
         {note ? (
           <p className="mt-1 text-[12.5px] text-ink-faint">{note}</p>
         ) : null}

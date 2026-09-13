@@ -88,3 +88,35 @@ export function toAppError(error: unknown): AppError {
   }
   return new AppError("INTERNAL", String(error));
 }
+
+export type PublicError = {
+  code: ErrorCode;
+  message: string;
+  details?: unknown;
+};
+
+/**
+ * The body a client is allowed to see.
+ *
+ * Every code but `INTERNAL` carries a message this server wrote on purpose, so
+ * it passes through. `INTERNAL` is the opposite: its message is whatever a
+ * thrown `Error` happened to say — a file path, a SQL fragment, an upstream
+ * stack — and its details name the constructor. With `redactInternal` the
+ * caller gets the code and nothing else; the real text belongs in the log.
+ */
+export function toPublicError(
+  error: AppError,
+  options: { redactInternal: boolean },
+): PublicError {
+  if (options.redactInternal && error.code === "INTERNAL") {
+    return {
+      code: "INTERNAL",
+      message: "Internal server error.",
+    };
+  }
+  return {
+    code: error.code,
+    message: error.message,
+    ...(error.details === undefined ? {} : { details: error.details }),
+  };
+}

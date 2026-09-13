@@ -269,11 +269,24 @@ async function choose(chosen: File) {
 /**
  * Scoped to the form on purpose: the import review labels its rows with the
  * same words the form labels its fields with, which is correct on screen and
- * ambiguous to a document-wide query.
+ * ambiguous to a document-wide query. Restricted to controls for the same
+ * reason — a section is labelled by its own heading, so "Summary" names both
+ * a landmark and the textarea inside it.
  */
 const field = (label: string) =>
   within(document.getElementById("profile-form") as HTMLElement).getByLabelText(
     label,
+    { selector: "input, textarea, select" },
+  );
+
+/**
+ * Repeated lists reuse control labels — every card has its own "Add bullet" —
+ * so a query for one has to say which section it means.
+ */
+const section = (name: string) =>
+  within(document.getElementById("profile-form") as HTMLElement).getByRole(
+    "region",
+    { name },
   );
 
 const lastUpload = () => FakeXhr.sent[FakeXhr.sent.length - 1] as FakeXhr;
@@ -365,7 +378,11 @@ describe("profile form", () => {
     await mount();
 
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Add bullet" }));
+      fireEvent.click(
+        within(section("Experience")).getByRole("button", {
+          name: "Add bullet",
+        }),
+      );
     });
     await act(async () => {
       fireEvent.change(field("Bullet 2"), {
@@ -373,7 +390,11 @@ describe("profile form", () => {
       });
     });
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "Move bullet 2 up" }));
+      fireEvent.click(
+        within(section("Experience")).getByRole("button", {
+          name: "Move bullet 2 up",
+        }),
+      );
     });
     await act(async () => {
       fireEvent.click(screen.getByRole("button", { name: /save profile/i }));
@@ -496,6 +517,52 @@ describe("resume import", () => {
     });
     expect(puts).toHaveLength(1);
     expect(puts[0]?.headline).toBe("Principal Platform Engineer");
+  });
+
+  it("proposes parsed projects as their own reviewable row", async () => {
+    await mount();
+    await choose(file("ada-resume.pdf"));
+
+    await act(async () => {
+      lastUpload().answer(
+        200,
+        importPayload({
+          draft: {
+            projects: [
+              {
+                name: "parley",
+                description: "Node.js, SQLite",
+                url: null,
+                bullets: ["Per-speaker capture over one Discord voice tap."],
+              },
+            ],
+          },
+        }),
+      );
+    });
+
+    const review = screen.getByRole("region", { name: /review import/i });
+    expect(review).toHaveTextContent("parley — Node.js, SQLite");
+    // The project on file is what it would replace, shown beside it.
+    expect(review).toHaveTextContent("kafka-lag-exporter");
+
+    await act(async () => {
+      fireEvent.click(within(review).getByRole("button", { name: /^accept/i }));
+    });
+
+    expect(field("Project")).toHaveValue("parley");
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: /save profile/i }));
+    });
+    expect(puts[0]?.projects).toEqual([
+      {
+        name: "parley",
+        description: "Node.js, SQLite",
+        url: null,
+        bullets: ["Per-speaker capture over one Discord voice tap."],
+      },
+    ]);
   });
 
   it("keeps a field the user unticked out of the merge", async () => {

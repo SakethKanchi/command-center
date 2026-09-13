@@ -105,6 +105,13 @@ splitting on it turned one city into `["Toronto","Canada"]`, at which point
 sorts last rather than as 0; a posting that published no salary is dropped while
 a pay floor is set rather than being assumed to clear or fail it.
 
+A saved resume also gets **suggested roles**: a row of titles the profile
+already clears, each one a one-click search. They cost a model call, so they
+are generated once and stored against a fingerprint of the profile fields they
+were drawn from — editing a bullet regenerates them, correcting a phone number
+does not. A machine with no saved resume shows no row at all rather than
+suggesting roles off the committed seed profile.
+
 ## Run it in a container
 
 One image: the API, the built dashboard, and the Typst binary the resume
@@ -148,7 +155,7 @@ Notes:
 ```bash
 npm install
 npm run migrate
-npm run seed            # ingest real postings from a keyless aggregator
+npm run seed            # ingest real postings from all six keyless boards
 
 cp .env.example .env    # add LLM_API_KEY for live agent runs
 npm run dev             # API on :8787, dashboard on :5173
@@ -162,9 +169,27 @@ The evaluation harness needs no credentials at all:
 npm run eval
 ```
 
+### Run it in production
+
+```bash
+npm run build            # dashboard into dist/web
+NODE_ENV=production npm start
+```
+
+One process then serves the API and the dashboard on `PORT`. Production binds
+`0.0.0.0`, because a container has to publish to be reachable; anything else
+binds `127.0.0.1`, and `HOST` overrides either. It also defaults logs to JSON
+and keeps stack traces out of API error bodies.
+
+The environment is validated once at boot, so a bad `PORT` exits 1 naming the
+variable and the reason rather than failing later, one route at a time.
+Migrations apply on start. `SIGTERM` stops accepting, drains the in-flight
+requests, marks any run interrupted mid-step as failed with that reason, closes
+SQLite and exits 0 — `SHUTDOWN_TIMEOUT_MS` bounds the drain, 10s by default.
+
 ### Connect the external apps
 
-Two ways, and direct wins when both are available.
+Two routes, and direct wins when both are available.
 
 ```bash
 npm run connect google   # Google Sheets + Gmail send, one OAuth consent
@@ -173,16 +198,40 @@ npm run connect composio # check COMPOSIO_API_KEY against Composio, explain a re
 npm run connect status
 ```
 
-Or set `COMPOSIO_API_KEY` and press **Connect** on `/apps`: Composio hosts the
-OAuth app, so Gmail, Notion and Sheets connect with one consent and no Google
-Cloud project. Get a key at [platform.composio.dev](https://platform.composio.dev)
-→ Settings → API Keys, and copy the whole thing — the dashboard shows keys
+Direct credentials take precedence whenever they exist — a broker in front of
+everything would collapse three integrations into one, and the direct clients
+are already built and tested. Each connector reports which transport it is on.
+
+The other route is Composio, which hosts the OAuth app: Gmail, Notion and
+Sheets each connect with one consent, no Google Cloud project and no Notion
+integration secret. Composio issues two kinds of credential, and this app takes
+either one.
+
+| | project key | user key |
+|---|---|---|
+| prefix | `ck_` / `ak_` | `uak_` |
+| comes from | [platform.composio.dev](https://platform.composio.dev) → Settings → API Keys | `composio login` |
+| app reads it from | `COMPOSIO_API_KEY` in the environment | `${COMPOSIO_CACHE_DIR:-~/.composio}/user_data.json` |
+| headers | `x-api-key` | `x-user-api-key` + `x-org-id` + `x-project-id` |
+| executes a tool via | `POST /tools/execute/{slug}` | a tool-router session, opened once and reused |
+
+`composio login` is the zero-copy option: the CLI already wrote the key to
+disk, the server reads it from there, and no secret has to go into `.env`. It is
+also the *only* option for a **consumer** project — an individual login — which
+issues nothing but the user key. `COMPOSIO_API_KEY` wins when both are present.
+
+If you do paste a project key, copy the whole thing: the dashboard shows keys
 masked, and a truncated paste is rejected with `APIKey_InvalidAPIKey`.
-`npm run connect composio` tells you which of the two happened. Its free tier
-covers this comfortably. Direct credentials take precedence whenever they
-exist — a broker in front of everything would collapse three integrations into
-one, and the direct clients are already built and tested. Each connector
-reports which transport it is using.
+`npm run connect composio` tells you which of the two happened — it reports set
+or unset, the length, a masked head and tail, then calls Composio and prints the
+verdict in Composio's own words. It diagnoses the environment variable only; a
+CLI login is read by the server, not by that script. The free tier covers this
+app comfortably.
+
+Then press **Connect** on `/apps` and consent in the window that opens. Only an
+`ACTIVE` account is ever bound, so a stale `FAILED` or `EXPIRED` account sitting
+beside a working one cannot be mistaken for a live connection; a card that is
+not green names what to reconnect.
 
 An unconfigured connector is skipped with a reason, so the agent runs without
 them. Disconnecting never deletes anything in the external app.
@@ -192,6 +241,11 @@ them. Disconnecting never deletes anything in the external app.
 Edit it at `/profile`, or import an existing resume (`.pdf`, `.docx`, `.txt`,
 `.md`) and review the parsed draft before it is saved. Import **never**
 autosaves: it returns a draft, you accept it, and only then is anything written.
+
+It holds identity, a summary, links, skills, experience, projects and
+education. Projects are the section with no employer attached — side projects,
+open source, coursework — and their bullets are quoted and reordered per
+posting exactly as a role's are.
 
 The profile is the single source of truth every fabrication check reads, which
 is also why the importer will not guess at it. An extracted name that looks like
@@ -208,10 +262,11 @@ fair price for not publishing a phone number in a public repo.
 ## Verify
 
 ```bash
-npm run typecheck
-npm run test
+npm run typecheck        # tsc --noEmit
+npm run test             # 605 tests across 39 files
+npm run lint             # biome
 npm run eval             # exits non-zero when a quality gate fails
-npm run verify           # all three
+npm run verify           # typecheck, test, eval
 ```
 
 ## Design notes
@@ -251,7 +306,7 @@ number.
 src/domain/              shared types: jobs, search, tags, profile, connectors, agent
 src/server/
   db/                    schema.sql + node:sqlite access
-  infra/                 errors, logger, retry policy
+  infra/                 validated config, errors, logger, retry policy, lifecycle
   repos/                 all data access
   llm/                   OpenAI-compatible client, scoring, tailoring
   ingest/                nine job-board adapters, six of them keyless

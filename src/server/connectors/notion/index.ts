@@ -26,8 +26,11 @@ import {
 import { type AppError, badRequest, toAppError } from "@server/infra/errors";
 import { logger } from "@server/infra/logger";
 import {
+  type NotionLaneRef,
+  resolveNotionRowTransport,
+} from "../composio/transport";
+import {
   createDatabase,
-  createPage,
   type NotionConfig,
   type NotionDatabaseIds,
   type NotionObject,
@@ -35,21 +38,16 @@ import {
   notionCredentialsSchema,
   notionUrlFromId,
   plainText,
-  queryAll,
   retrieveDatabase,
   search,
   searchDatabases,
-  updatePage,
 } from "./api";
+import { hashRow, NOTION_DATABASES } from "./properties";
 import {
-  hashRow,
-  NOTION_DATABASES,
-  NOTION_KEY_PROPERTY,
-  toNotionProperties,
-} from "./properties";
-
-/** Notion allows at most 100 conditions inside a compound filter. */
-const NOTION_FILTER_CONDITION_LIMIT = 100;
+  createDirectNotionRowTransport,
+  indexByTitle,
+  readNotionToken,
+} from "./transport";
 
 export type NotionLaneTarget = {
   kind: ConnectorEntityKind;
@@ -57,19 +55,6 @@ export type NotionLaneTarget = {
   title: string;
   url: string;
 };
-
-function readToken(ctx: ConnectorAdapterContext): string {
-  const parsed = notionCredentialsSchema.safeParse(
-    ctx.connector.credentials ?? {},
-  );
-  if (!parsed.success) {
-    throw badRequest(
-      "Notion connector credentials are missing or malformed: expected { accessToken } holding the internal integration secret.",
-      parsed.error.flatten(),
-    );
-  }
-  return parsed.data.accessToken;
-}
 
 function readConfig(ctx: ConnectorAdapterContext): NotionConfig {
   const parsed = notionConfigSchema.safeParse(ctx.connector.config ?? {});
@@ -115,16 +100,6 @@ function toLaneTarget(
     title: title === "" ? NOTION_DATABASES[kind].title : title,
     url: database.url ?? notionUrlFromId(database.id),
   };
-}
-
-/** Databases the integration can see, indexed by lowercased title. */
-function indexByTitle(databases: NotionObject[]): Map<string, NotionObject> {
-  const byTitle = new Map<string, NotionObject>();
-  for (const database of databases) {
-    const title = plainText(database.title).trim().toLowerCase();
-    if (title !== "" && !byTitle.has(title)) byTitle.set(title, database);
-  }
-  return byTitle;
 }
 
 async function resolveLane(args: {
@@ -190,7 +165,7 @@ async function resolveLane(args: {
 export async function resolveNotionDatabases(
   ctx: ConnectorAdapterContext,
 ): Promise<{ targets: NotionLaneTarget[]; databaseIds: NotionDatabaseIds }> {
-  const token = readToken(ctx);
+  const token = readNotionToken(ctx);
   const config = readConfig(ctx);
   // Doubles as the credential check: a bad token fails here with 401.
   const byTitle = indexByTitle(await searchDatabases(token, ctx.fetchImpl));
@@ -206,51 +181,6 @@ export async function resolveNotionDatabases(
     databaseIds[target.kind] = target.databaseId;
   }
   return { targets, databaseIds };
-}
-
-function readKeyProperty(page: NotionObject): string {
-  const property = page.properties?.[NOTION_KEY_PROPERTY];
-  if (!property || typeof property !== "object" || !("title" in property)) {
-    return "";
-  }
-  const title = property.title;
-  return Array.isArray(title) ? plainText(title) : "";
-}
-
-/**
- * Pages in one lane whose `Key` matches any of `keys`, batched into compound
- * `or` filters rather than one query per row.
- */
-async function findPagesByKey(
-  token: string,
-  fetchImpl: typeof fetch,
-  databaseId: string,
-  keys: string[],
-): Promise<Map<string, NotionObject>> {
-  const found = new Map<string, NotionObject>();
-  const unique = [...new Set(keys)];
-
-  for (
-    let offset = 0;
-    offset < unique.length;
-    offset += NOTION_FILTER_CONDITION_LIMIT
-  ) {
-    const chunk = unique.slice(offset, offset + NOTION_FILTER_CONDITION_LIMIT);
-    const conditions = chunk.map((key) => ({
-      property: NOTION_KEY_PROPERTY,
-      title: { equals: key },
-    }));
-    const pages = await queryAll(token, fetchImpl, databaseId, {
-      ...(conditions.length === 1 ? conditions[0] : { or: conditions }),
-    });
-
-    for (const page of pages) {
-      const key = readKeyProperty(page);
-      if (key !== "" && !found.has(key)) found.set(key, page);
-    }
-  }
-
-  return found;
 }
 
 export type NotionPushLane = {
@@ -274,32 +204,6 @@ function groupByKind(rows: CommandCenterRow[]): NotionPushLane[] {
   );
 }
 
-async function resolvePushDatabaseId(args: {
-  ctx: ConnectorAdapterContext;
-  token: string;
-  kind: ConnectorEntityKind;
-  config: NotionConfig;
-  inventory: Map<string, NotionObject> | null;
-}): Promise<{
-  databaseId: string;
-  inventory: Map<string, NotionObject> | null;
-}> {
-  const configured = args.config.databaseIds?.[args.kind];
-  if (configured) return { databaseId: configured, inventory: args.inventory };
-
-  const spec = NOTION_DATABASES[args.kind];
-  const inventory =
-    args.inventory ??
-    indexByTitle(await searchDatabases(args.token, args.ctx.fetchImpl));
-  const existing = inventory.get(spec.title.toLowerCase());
-  if (!existing) {
-    throw badRequest(
-      `Notion connector has no "${spec.title}" database for the ${args.kind} lane: run connect to provision it, or set config.databaseIds.${args.kind}.`,
-    );
-  }
-  return { databaseId: existing.id, inventory };
-}
-
 export const notionAdapter: ConnectorAdapter = {
   key: "notion",
   supportedEntityKinds: CONNECTOR_ENTITY_KINDS,
@@ -317,7 +221,7 @@ export const notionAdapter: ConnectorAdapter = {
 
   async status(ctx: ConnectorAdapterContext): Promise<ConnectorHealth> {
     try {
-      const token = readToken(ctx);
+      const token = readNotionToken(ctx);
       const config = readConfig(ctx);
       // Cheapest call that proves the token still works.
       await search(token, ctx.fetchImpl, "", {
@@ -378,15 +282,35 @@ export const notionAdapter: ConnectorAdapter = {
     }
   },
 
+  /**
+   * Push rows to the lane databases through whichever transport is
+   * configured.
+   *
+   * The ledger comparison and the per-row failure isolation stay here; the
+   * transport decides how a row reaches Notion — a REST page write with the
+   * nested property payload, or `NOTION_INSERT_ROW_DATABASE` with the flat
+   * one. Both carry the same typed columns, from the same definition.
+   */
   async push(
     ctx: ConnectorAdapterContext,
     input: { rows: CommandCenterRow[]; known: Map<string, ConnectorRecord> },
   ): Promise<ConnectorPushReport> {
-    const token = readToken(ctx);
     const config = readConfig(ctx);
+    const transport = resolveNotionRowTransport({
+      connector: ctx.connector,
+      fetchImpl: ctx.fetchImpl,
+      hasDirectCredentials: notionCredentialsSchema.safeParse(
+        ctx.connector.credentials ?? {},
+      ).success,
+      direct: createDirectNotionRowTransport({
+        readToken: () => readNotionToken(ctx),
+        fetchImpl: ctx.fetchImpl,
+      }),
+      databaseIds: config.databaseIds ?? null,
+    });
+
     const results: ConnectorPushResult[] = [];
     const failures: ConnectorPushFailure[] = [];
-    let inventory: Map<string, NotionObject> | null = null;
     // Seed the report link from config so even an all-unchanged push (which
     // performs no request at all) still returns a usable destination.
     let destinationUrl: string | null = null;
@@ -423,20 +347,15 @@ export const notionAdapter: ConnectorAdapter = {
         continue;
       }
 
-      let databaseId: string;
+      let target: NotionLaneRef;
       try {
-        const resolved = await resolvePushDatabaseId({
-          ctx,
-          token,
+        target = await transport.openLane({
           kind: lane.kind,
-          config,
-          inventory,
+          databaseId: config.databaseIds?.[lane.kind] ?? null,
         });
-        databaseId = resolved.databaseId;
-        inventory = resolved.inventory;
       } catch (error) {
         const appError = toAppError(error);
-        // A dead token dooms every lane; a missing database only this one.
+        // A dead token or key dooms every lane; a missing database only this one.
         if (appError.code === "UNAUTHORIZED") throw appError;
         for (const entry of planned) {
           failures.push({
@@ -449,15 +368,13 @@ export const notionAdapter: ConnectorAdapter = {
         continue;
       }
 
-      destinationUrl ??= notionUrlFromId(databaseId);
+      destinationUrl ??= notionUrlFromId(target.databaseId);
 
-      let existingPages = new Map<string, NotionObject>();
+      let existingPages = new Map<string, string>();
       let lookupError: AppError | null = null;
       try {
-        existingPages = await findPagesByKey(
-          token,
-          ctx.fetchImpl,
-          databaseId,
+        existingPages = await transport.findRowsByKey(
+          target,
           pending.map((entry) => entry.row.key),
         );
       } catch (error) {
@@ -489,18 +406,20 @@ export const notionAdapter: ConnectorAdapter = {
         }
 
         try {
-          const properties = toNotionProperties(entry.row);
-          const existingId = existingPages.get(entry.row.key)?.id ?? null;
-          const page = existingId
-            ? await updatePage(token, ctx.fetchImpl, existingId, properties)
-            : await createPage(token, ctx.fetchImpl, databaseId, properties);
+          const existingId = existingPages.get(entry.row.key) ?? null;
+          const page = await transport.write({
+            parentId: target.databaseId,
+            title: entry.row.key,
+            row: entry.row,
+            pageId: existingId,
+          });
 
           results.push({
             entityKind: lane.kind,
             entityId: entry.row.key,
-            outcome: existingId ? "updated" : "created",
+            outcome: page.outcome,
             remoteId: page.id,
-            remoteUrl: page.url ?? notionUrlFromId(page.id),
+            remoteUrl: page.url,
           });
         } catch (error) {
           const appError = toAppError(error);

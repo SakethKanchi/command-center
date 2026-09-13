@@ -35,6 +35,23 @@ const PLACES = [
   { value: "Vancouver, Canada", count: 3 },
 ];
 
+/**
+ * What `/api/profile/role-suggestions` answers. Defaults to the no-resume
+ * case, so the row renders nothing and every pre-existing test sees the screen
+ * it was written against.
+ */
+let roleSuggestions: {
+  suggestions: Array<{ title: string; query: string; reason: string }>;
+  generatedAt: string | null;
+  stale: boolean;
+  profileSource: "stored" | "seed";
+} = {
+  suggestions: [],
+  generatedAt: null,
+  stale: false,
+  profileSource: "seed",
+};
+
 function installFetch() {
   const impl = vi.fn(async (input: string | URL | Request) => {
     const url = typeof input === "string" ? input : input.toString();
@@ -50,6 +67,9 @@ function installFetch() {
     // silently shifted every `takeSearches()` index by one.
     if (path === "/api/locations") {
       return json({ ok: true, data: { locations: PLACES } });
+    }
+    if (path === "/api/profile/role-suggestions") {
+      return json({ ok: true, data: roleSuggestions });
     }
     // Same reasoning for the adapter registry: the discover panel reads it
     // once on mount, which an empty corpus triggers on its own.
@@ -212,6 +232,12 @@ const url = () => screen.getByTestId("url").textContent ?? "";
 
 beforeEach(() => {
   pending = [];
+  roleSuggestions = {
+    suggestions: [],
+    generatedAt: null,
+    stale: false,
+    profileSource: "seed",
+  };
   vi.useFakeTimers({ shouldAdvanceTime: true });
   installFetch();
 });
@@ -248,6 +274,39 @@ describe("SearchPage", () => {
     expect(searches).toHaveLength(1);
     expect(searches[0]?.params.get("q")).toBe("staff");
     expect(url()).toContain("q=staff");
+  });
+
+  it("searches a suggested role from the stored resume in one click", async () => {
+    roleSuggestions = {
+      suggestions: [
+        {
+          title: "Compiler Engineer",
+          query: "compiler engineer",
+          reason: "Built A-0 at Eckert-Mauchly.",
+        },
+      ],
+      generatedAt: "2026-09-12T09:00:00.000Z",
+      stale: false,
+      profileSource: "stored",
+    };
+
+    mount();
+    await settleProbe();
+    await settle(takeSearches()[0] as Pending, result({ total: 39 }));
+
+    const chip = await screen.findByTestId("role-suggestion-compiler engineer");
+    await act(async () => {
+      fireEvent.click(chip);
+    });
+
+    const searches = takeSearches();
+    expect(searches).toHaveLength(1);
+    expect(searches[0]?.params.get("q")).toBe("compiler engineer");
+    // The URL is the state, so a picked suggestion is a linkable result set.
+    expect(url()).toContain("q=compiler+engineer");
+    expect(
+      (screen.getByLabelText("Search job postings") as HTMLInputElement).value,
+    ).toBe("compiler engineer");
   });
 
   it("collapses a typing session into one history entry so back skips the whole word", async () => {

@@ -10,16 +10,19 @@
  * hazard the gate exists to stop.
  */
 
-import type { ProfileDraft } from "@domain";
+import type { ProfileDraft, RoleSuggestion } from "@domain";
 import type { ApiDeps } from "@server/api/app";
 import { ok } from "@server/api/respond";
 import { badRequest } from "@server/infra/errors";
+import { suggestRoles } from "@server/llm/suggest-roles";
 import {
   draftFromResumeText,
+  draftToProfile,
   extractResumeText,
   profileCompleteness,
   profileToDraft,
 } from "@server/profile";
+import { profileFingerprint } from "@server/profile/fingerprint";
 import { loadProfile } from "@server/resume/profile";
 import { Hono } from "hono";
 import { z } from "zod";
@@ -198,6 +201,68 @@ export function createProfileRoutes(deps: ApiDeps): Hono {
       warnings: [...extracted.warnings, ...warnings],
       extractedChars: extracted.text.length,
       fileName: file.name,
+    });
+  });
+
+  /**
+   * Suggested roles for the stored profile.
+   *
+   * Split across two verbs for the same reason import is: `GET` never spends
+   * a model call, so the search screen can render whatever is on file
+   * immediately, and `POST` is the one that generates. `stale` is the
+   * difference between the fingerprint of the profile on file and the one the
+   * stored set was drawn from — an edited resume invalidates its suggestions
+   * without anyone having to remember to clear them.
+   *
+   * Suggestions are drawn from a resume the user actually saved. The committed
+   * seed profile is not that, so a machine with no stored profile gets an
+   * empty answer rather than suggestions for somebody else's career.
+   */
+  routes.get("/profile/role-suggestions", (c) => {
+    const stored = deps.repos.profile.get();
+    const cached = deps.repos.profile.getSuggestions();
+    if (stored === null) {
+      return ok(c, {
+        suggestions: [] as RoleSuggestion[],
+        generatedAt: null,
+        stale: false,
+        profileSource: "seed" as const,
+      });
+    }
+
+    return ok(c, {
+      suggestions: cached?.suggestions ?? [],
+      generatedAt: cached?.generatedAt ?? null,
+      stale:
+        cached === null || cached.fingerprint !== profileFingerprint(stored),
+      profileSource: "stored" as const,
+    });
+  });
+
+  routes.post("/profile/role-suggestions", async (c) => {
+    const stored = deps.repos.profile.get();
+    if (stored === null) {
+      throw badRequest(
+        "Import or save a resume before asking for suggested roles.",
+      );
+    }
+
+    const suggestions = await suggestRoles({
+      profile: draftToProfile(stored),
+      llm: deps.llm,
+    });
+    const saved = deps.repos.profile.putSuggestions({
+      suggestions,
+      fingerprint: profileFingerprint(stored),
+      model: deps.llm.model,
+      generatedAt: new Date().toISOString(),
+    });
+
+    return ok(c, {
+      suggestions: saved.suggestions,
+      generatedAt: saved.generatedAt,
+      stale: false,
+      profileSource: "stored" as const,
     });
   });
 

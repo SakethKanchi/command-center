@@ -7,21 +7,26 @@
  * transport, not a parallel world.
  */
 
-import type {
-  Connector,
-  ConnectorAuthMode,
-  ConnectorHealth,
-  ConnectorProvider,
-  ConnectorStatus,
-  OutboundEmailRequest,
-  OutboundEmailResult,
+import {
+  CONNECTOR_ENTITY_KINDS,
+  type Connector,
+  type ConnectorAuthMode,
+  type ConnectorHealth,
+  type ConnectorProvider,
+  type ConnectorStatus,
+  type OutboundEmailRequest,
+  type OutboundEmailResult,
 } from "@domain";
 import { nowIso } from "@server/db";
 import { badRequest, toAppError, upstreamError } from "@server/infra/errors";
 import { logger } from "@server/infra/logger";
 import type { RepoBundle } from "@server/repos";
-import { createPage, updatePage } from "../notion/api";
-import { NOTION_KEY_PROPERTY } from "../notion/properties";
+import { type NotionDatabaseIds, notionConfigSchema } from "../notion/api";
+import {
+  composioDatabaseProperties,
+  NOTION_DATABASES,
+} from "../notion/properties";
+import { createDirectNotionRowTransport } from "../notion/transport";
 import { sheetsConfigSchema, spreadsheetWebUrl } from "../sheets/api";
 import { COMMAND_CENTER_SPREADSHEET_TITLE } from "../sheets/layout";
 import {
@@ -38,6 +43,10 @@ import {
 import {
   composioToolkitFor,
   isComposioProvider,
+  NOTION_CREATE_DATABASE_TOOL,
+  NOTION_FETCH_DATA_TOOL,
+  notionCreateDatabaseArguments,
+  notionFetchDatabasesArguments,
   SHEETS_CREATE_SPREADSHEET_TOOL,
   sheetsCreateSpreadsheetArguments,
 } from "./toolkits";
@@ -50,7 +59,8 @@ import {
   type NotionPageTransport,
   type NotionPageWrite,
   notConfiguredMessage,
-  notionUrlFor,
+  readNotionDatabases,
+  readNotionId,
   readSpreadsheetId,
   requireAuthMode,
   resolveAuthMode,
@@ -316,10 +326,20 @@ export async function syncProviderStatus(
   let accountId = state.connectedAccountId;
   if (!accountId) {
     const accounts = await client.listConnectedAccounts(toolkit.toolkitSlug);
-    accountId =
-      accounts.find((account) => account.status === "ACTIVE")?.id ??
-      accounts[0]?.id ??
-      null;
+    // A toolkit can hold several accounts, and a stale one outlives the
+    // account that works: this user's Composio holds a FAILED `notion` and
+    // an EXPIRED `gmail` beside the ACTIVE pair. `accounts[0]` would bind
+    // the dead one and report a connected app that cannot execute a tool.
+    // INITIATED is kept as the second tier because the hosted Connect Link
+    // polls an account that is INITIATED and not yet ACTIVE, so an
+    // ACTIVE-only rule would stall consent instead of completing it.
+    const live =
+      accounts.find((account) => account.status === "ACTIVE") ??
+      accounts.find(
+        (account) =>
+          account.status === "INITIATED" || account.status === "INITIALIZING",
+      );
+    accountId = live?.id ?? null;
   }
 
   if (!accountId) {
@@ -336,7 +356,15 @@ export async function syncProviderStatus(
   const account = await client.getConnectedAccount(accountId);
   const mapped = STATUS_BY_ACCOUNT_STATUS[account.status];
   const connected = account.status === "ACTIVE";
-  const label = account.userId ?? account.toolkitSlug ?? toolkit.toolkitSlug;
+  // A consumer entity id (`consumer-<uuid>-<org>`) is machine plumbing, not
+  // something to show on a card. Prefer a name the user recognises and fall
+  // back to the toolkit, never to the raw id.
+  const label =
+    (account.userId?.startsWith("consumer-")
+      ? `${toolkit.toolkitSlug} via Composio`
+      : account.userId) ??
+    account.toolkitSlug ??
+    toolkit.toolkitSlug;
   const lastError = connected
     ? null
     : (account.statusReason ??
@@ -446,49 +474,18 @@ export async function sendViaComposio(
 
 /**
  * The direct half of the Notion page transport, built from the same
- * `notion/api.ts` primitives the existing adapter pushes through.
+ * `notion/api.ts` primitives the adapter pushes through. Kept as a thin
+ * adaptor over `createDirectNotionRowTransport` so a page write and a row
+ * write render properties identically.
  */
 export function createDirectNotionTransport(args: {
   token: string;
   fetchImpl: typeof fetch;
 }): NotionPageTransport {
-  return {
-    mode: "direct",
-
-    async write(input) {
-      const properties = input.properties ?? {
-        [NOTION_KEY_PROPERTY]: {
-          title: [{ text: { content: input.title } }],
-        },
-      };
-
-      if (input.pageId) {
-        const page = await updatePage(
-          args.token,
-          args.fetchImpl,
-          input.pageId,
-          properties,
-        );
-        return {
-          id: page.id,
-          url: page.url ?? notionUrlFor(page.id),
-          outcome: "updated",
-        };
-      }
-
-      const page = await createPage(
-        args.token,
-        args.fetchImpl,
-        input.parentId,
-        properties,
-      );
-      return {
-        id: page.id,
-        url: page.url ?? notionUrlFor(page.id),
-        outcome: "created",
-      };
-    },
-  };
+  return createDirectNotionRowTransport({
+    readToken: () => args.token,
+    fetchImpl: args.fetchImpl,
+  });
 }
 
 /**
@@ -591,4 +588,105 @@ export async function ensureComposioSpreadsheet(
   });
 
   return { spreadsheetId, created: true };
+}
+
+/**
+ * The lane databases the Composio Notion transport writes into.
+ *
+ * Same job as `ensureComposioSpreadsheet`, same storage: the ids land in
+ * `config.databaseIds`, which is the key the direct adapter reads, so a
+ * workspace never ends up with two "Opportunities" databases because the user
+ * linked Notion twice. Resolution order per lane is: the stored id, then a
+ * database already in the workspace with the lane's title, then — only if
+ * `config.parentPageId` names a page shared with the integration — a new one.
+ *
+ * With every id stored this costs no requests at all.
+ */
+export async function ensureComposioNotionDatabases(
+  deps: ComposioDeps,
+): Promise<NotionDatabaseIds> {
+  const row = loadRow("notion", deps);
+  const config = notionConfigSchema.safeParse(row?.config ?? {});
+  const stored: NotionDatabaseIds = config.success
+    ? { ...(config.data.databaseIds ?? {}) }
+    : {};
+
+  const missing = CONNECTOR_ENTITY_KINDS.filter((kind) => !stored[kind]);
+  if (missing.length === 0) return stored;
+
+  if (!composioAvailable(deps)) {
+    throw badRequest(notConfiguredMessage("notion"));
+  }
+  const client = resolveClient(deps);
+  const state = readComposioState(row);
+  const connectedAccountId = state.connectedAccountId;
+
+  // One listing answers every missing lane, and adopting by title is what
+  // keeps a second sync from provisioning duplicates.
+  const listed = await client.executeTool(NOTION_FETCH_DATA_TOOL, {
+    arguments: notionFetchDatabasesArguments({}),
+    connectedAccountId,
+  });
+  const databases = readNotionDatabases(listed.data);
+  if (databases === null) {
+    throw upstreamError(
+      `Composio ${NOTION_FETCH_DATA_TOOL} returned the workspace's databases in an unreadable shape, so an existing lane database cannot be told from a missing one — provisioning now could duplicate one. Set config.databaseIds for the ${missing.join(", ")} lane(s) explicitly, or connect Notion directly (npm run connect notion).`,
+      { logId: listed.logId, tool: NOTION_FETCH_DATA_TOOL },
+    );
+  }
+  const byTitle = new Map(
+    databases.map((database) => [database.title.toLowerCase(), database.id]),
+  );
+
+  const parentPageId = config.success
+    ? (config.data.parentPageId ?? null)
+    : null;
+
+  for (const kind of missing) {
+    const spec = NOTION_DATABASES[kind];
+    const adopted = byTitle.get(spec.title.toLowerCase());
+    if (adopted) {
+      stored[kind] = adopted;
+      continue;
+    }
+
+    if (!parentPageId) {
+      throw badRequest(
+        `Notion over Composio has no "${spec.title}" database for the ${kind} lane, and no page to create it under. Set config.parentPageId on the Notion connector to a page you have shared with the Composio integration in Notion (Settings & Members -> Connections), or set config.databaseIds.${kind} to an existing database id.`,
+      );
+    }
+
+    const created = await client.executeTool(NOTION_CREATE_DATABASE_TOOL, {
+      arguments: notionCreateDatabaseArguments({
+        parentPageId,
+        title: spec.title,
+        properties: composioDatabaseProperties(kind),
+      }),
+      connectedAccountId,
+    });
+    const databaseId = readNotionId(created.data);
+    if (!databaseId) {
+      throw upstreamError(
+        `Composio ${NOTION_CREATE_DATABASE_TOOL} answered without a database id for the ${kind} lane, so it cannot be addressed and a retry would create a second one.`,
+        { logId: created.logId, tool: NOTION_CREATE_DATABASE_TOOL },
+      );
+    }
+    stored[kind] = databaseId;
+    logger.info("Created a Notion lane database through Composio", {
+      kind,
+      title: spec.title,
+      databaseId,
+    });
+  }
+
+  persistState("notion", deps, {
+    // Empty patch, not `null`: the linked account must survive writing the
+    // database ids next to it.
+    state: {},
+    status: row?.status ?? "disconnected",
+    lastError: row?.lastError ?? null,
+    config: { databaseIds: stored },
+  });
+
+  return stored;
 }

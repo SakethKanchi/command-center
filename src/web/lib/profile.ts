@@ -1,4 +1,9 @@
-import type { ProfileCompleteness, ProfileDraft, ProfileRole } from "@domain";
+import type {
+  ProfileCompleteness,
+  ProfileDraft,
+  ProfileRole,
+  RoleSuggestion,
+} from "@domain";
 import { ApiError, request } from "@web/lib/api";
 
 /**
@@ -46,6 +51,37 @@ export function saveProfile(
   return request<ProfileSaveResponse>("/api/profile", {
     method: "PUT",
     body: JSON.stringify(draft),
+    ...(signal ? { signal } : {}),
+  });
+}
+
+/* ── suggested roles ────────────────────────────────────────────────────── */
+
+export type RoleSuggestionResponse = {
+  suggestions: RoleSuggestion[];
+  generatedAt: string | null;
+  /** The stored set no longer describes the profile on file, or there is none. */
+  stale: boolean;
+  /** `seed` means no resume has been saved, so there is nothing to suggest from. */
+  profileSource: "stored" | "seed";
+};
+
+/** Reads whatever is stored. Never spends a model call. */
+export function fetchRoleSuggestions(
+  signal?: AbortSignal,
+): Promise<RoleSuggestionResponse> {
+  return request<RoleSuggestionResponse>(
+    "/api/profile/role-suggestions",
+    signal ? { signal } : undefined,
+  );
+}
+
+/** Asks the model for a fresh set and stores it. Slow by nature. */
+export function generateRoleSuggestions(
+  signal?: AbortSignal,
+): Promise<RoleSuggestionResponse> {
+  return request<RoleSuggestionResponse>("/api/profile/role-suggestions", {
+    method: "POST",
     ...(signal ? { signal } : {}),
   });
 }
@@ -394,9 +430,7 @@ function slice(draft: ProfileDraft, path: ReviewPath): string[] {
             project.name.trim() !== "" || project.description.trim() !== "",
         )
         .map((project) => {
-          const kept = project.bullets.filter(
-            (bullet) => bullet.trim() !== "",
-          );
+          const kept = project.bullets.filter((bullet) => bullet.trim() !== "");
           const head = project.description
             ? `${project.name || "project"} — ${project.description}`
             : project.name || "project";

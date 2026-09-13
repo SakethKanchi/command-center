@@ -6,14 +6,18 @@
  * actually running the agent, and seeding fake ones would make the dashboard
  * lie about what the system did.
  *
- *   npm run seed                       # freehire aggregator, 60 postings
+ *   npm run seed                       # every keyless board, 60 postings each
  *   npm run seed -- --limit 25
  *   npm run seed -- --source greenhouse:stripe --source lever:netflix
  *   npm run seed -- --query "ai engineer"
  */
 import { getDb } from "@server/db";
 import { toAppError } from "@server/infra/errors";
-import { type IngestSource, ingestJobs } from "@server/ingest/registry";
+import {
+  type IngestSource,
+  ingestJobs,
+  listSourceAdapters,
+} from "@server/ingest/registry";
 import { createRepos } from "@server/repos";
 
 function parseArgs(argv: string[]): { sources: IngestSource[]; limit: number } {
@@ -54,9 +58,16 @@ function parseArgs(argv: string[]): { sources: IngestSource[]; limit: number } {
     throw new Error(`Unknown flag: ${flag}`);
   }
 
-  // freehire aggregates many ATS boards behind one keyless API, which makes it
-  // the one source that works on a fresh clone with no configuration.
-  const resolved = sources.length > 0 ? sources : [{ id: "freehire" }];
+  // Every source that works without a company board token, which is what a
+  // fresh clone can reach with no configuration. All six, not one: a corpus
+  // from a single board gives the search rail a single opinion about which
+  // places, employers and pay bands exist.
+  const resolved =
+    sources.length > 0
+      ? sources
+      : listSourceAdapters()
+          .filter((adapter) => !adapter.needsBoardToken)
+          .map((adapter) => ({ id: adapter.id }));
   return {
     sources: query ? resolved.map((s) => ({ ...s, query })) : resolved,
     limit,

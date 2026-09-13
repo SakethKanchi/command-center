@@ -316,3 +316,95 @@ describe("PUT /api/profile", () => {
     expect(error.message).toContain("email");
   });
 });
+
+describe("/api/profile/role-suggestions", () => {
+  const SUGGESTED = {
+    suggestions: [
+      {
+        title: "Compiler Engineer",
+        query: "compiler engineer",
+        reason: "Built A-0 at Eckert-Mauchly.",
+      },
+      {
+        title: "Compiler Engineer",
+        query: "Compiler Engineer",
+        reason: "Duplicate of the first, differing only in case.",
+      },
+      { title: "", query: "language design", reason: "No title." },
+    ],
+  };
+
+  async function suggestions(method: "GET" | "POST"): Promise<Response> {
+    return app.request("/api/profile/role-suggestions", { method });
+  }
+
+  it("suggests nothing until a resume has been saved", async () => {
+    const data = await unwrap<{
+      suggestions: unknown[];
+      profileSource: string;
+      stale: boolean;
+    }>(await suggestions("GET"));
+
+    expect(data.profileSource).toBe("seed");
+    expect(data.suggestions).toEqual([]);
+    // Nothing to be stale against: the seed is not the user's resume.
+    expect(data.stale).toBe(false);
+
+    const error = await errorOf(await suggestions("POST"));
+    expect(error.code).toBe("INVALID_REQUEST");
+    expect(error.message).toContain("resume");
+  });
+
+  it("generates against the saved profile, then serves it without a model call", async () => {
+    await save(EXTRACTED as ProfileDraft);
+
+    const stale = await unwrap<{ stale: boolean }>(await suggestions("GET"));
+    expect(stale.stale).toBe(true);
+
+    llmPayload = SUGGESTED;
+    const generated = await unwrap<{
+      suggestions: Array<{ title: string; query: string }>;
+      generatedAt: string | null;
+      stale: boolean;
+    }>(await suggestions("POST"));
+
+    // The duplicate and the title-less row are dropped before storage.
+    expect(generated.suggestions).toEqual([
+      {
+        title: "Compiler Engineer",
+        query: "compiler engineer",
+        reason: "Built A-0 at Eckert-Mauchly.",
+      },
+    ]);
+    expect(generated.stale).toBe(false);
+    expect(generated.generatedAt).not.toBeNull();
+
+    // A model call now would return something else; the read must not make one.
+    llmPayload = { suggestions: [] };
+    const read = await unwrap<{
+      suggestions: Array<{ title: string }>;
+      stale: boolean;
+    }>(await suggestions("GET"));
+    expect(read.suggestions[0]?.title).toBe("Compiler Engineer");
+    expect(read.stale).toBe(false);
+  });
+
+  it("goes stale when the resume changes, but not when a phone number does", async () => {
+    await save(EXTRACTED as ProfileDraft);
+    llmPayload = SUGGESTED;
+    await suggestions("POST");
+
+    await save({ ...EXTRACTED, phone: "(555) 010-0000" } as ProfileDraft);
+    const contact = await unwrap<{ stale: boolean }>(await suggestions("GET"));
+    expect(contact.stale).toBe(false);
+
+    await save({ ...EXTRACTED, headline: "Rear Admiral" } as ProfileDraft);
+    const rewritten = await unwrap<{
+      stale: boolean;
+      suggestions: Array<{ title: string }>;
+    }>(await suggestions("GET"));
+    expect(rewritten.stale).toBe(true);
+    // Still served: last week's answer beats a blank row while a refresh runs.
+    expect(rewritten.suggestions[0]?.title).toBe("Compiler Engineer");
+  });
+});

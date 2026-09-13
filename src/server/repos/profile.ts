@@ -5,6 +5,8 @@ import type {
   ProfileLink,
   ProfileProject,
   ProfileRole,
+  RoleSuggestion,
+  RoleSuggestionSet,
   SkillGroup,
 } from "@domain";
 import { type Db, nowIso, parseJsonColumn } from "@server/db";
@@ -19,6 +21,9 @@ export type ProfileRepo = {
   put(draft: ProfileDraft): ProfileDraft;
   /** What the resume pipeline still needs before it can run on this draft. */
   completeness(draft: ProfileDraft): ProfileCompleteness;
+  /** The stored suggestion set, whatever profile state it was drawn from. */
+  getSuggestions(): RoleSuggestionSet | null;
+  putSuggestions(set: RoleSuggestionSet): RoleSuggestionSet;
 };
 
 type ProfileRow = {
@@ -33,6 +38,13 @@ type ProfileRow = {
   roles: string;
   projects: string;
   education: string;
+};
+
+type SuggestionRow = {
+  fingerprint: string;
+  model: string;
+  suggestions: string;
+  generated_at: string;
 };
 
 const trimOrNull = (value: string | null): string | null => {
@@ -78,7 +90,9 @@ function normalize(draft: ProfileDraft): ProfileDraft {
         name: project.name.trim(),
         description: project.description.trim(),
         url: trimOrNull(project.url),
-        bullets: project.bullets.map((bullet) => bullet.trim()).filter(isFilled),
+        bullets: project.bullets
+          .map((bullet) => bullet.trim())
+          .filter(isFilled),
       }))
       .filter((project) => project.name !== ""),
     education: draft.education
@@ -163,5 +177,41 @@ export function createProfileRepo(db: Db): ProfileRepo {
     },
 
     completeness: profileCompleteness,
+
+    getSuggestions() {
+      const row = db
+        .prepare(
+          `SELECT fingerprint, model, suggestions, generated_at
+             FROM profile_role_suggestions WHERE profile_id = ?`,
+        )
+        .get(PROFILE_ID) as unknown as SuggestionRow | undefined;
+      if (!row) return null;
+      return {
+        suggestions: parseJsonColumn<RoleSuggestion[]>(row.suggestions) ?? [],
+        fingerprint: row.fingerprint,
+        model: row.model,
+        generatedAt: row.generated_at,
+      };
+    },
+
+    putSuggestions(set) {
+      db.prepare(
+        `INSERT INTO profile_role_suggestions
+           (profile_id, fingerprint, model, suggestions, generated_at)
+         VALUES (?, ?, ?, ?, ?)
+         ON CONFLICT(profile_id) DO UPDATE SET
+           fingerprint = excluded.fingerprint,
+           model = excluded.model,
+           suggestions = excluded.suggestions,
+           generated_at = excluded.generated_at`,
+      ).run(
+        PROFILE_ID,
+        set.fingerprint,
+        set.model,
+        JSON.stringify(set.suggestions),
+        set.generatedAt,
+      );
+      return set;
+    },
   };
 }

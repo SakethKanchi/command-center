@@ -66,7 +66,7 @@ export function ProjectsEditor({
             <div className="grid gap-3 sm:grid-cols-2">
               <TextField
                 path={`projects.${index}.name`}
-                label="Name"
+                label="Project"
                 value={project.name}
                 placeholder="ai-quota-tracker"
                 error={errors[`projects.${index}.name`]}

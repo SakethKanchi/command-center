@@ -7,11 +7,30 @@ import type {
   ConnectorEntityKind,
   ConnectorRecord,
   FollowUpRow,
+  InterviewRow,
   OpportunityRow,
 } from "@domain";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { z } from "zod";
 import { notionAdapter } from "./index";
-import { hashRow, toNotionProperties } from "./properties";
+import {
+  hashRow,
+  NOTION_COLUMNS,
+  NOTION_RICH_TEXT_LIMIT,
+  toComposioProperties,
+  toNotionProperties,
+} from "./properties";
+
+const notionPropertyListSchema = z.object({
+  properties: z.array(
+    z.object({ name: z.string(), type: z.string(), value: z.string() }),
+  ),
+});
+
+/** The flat property list of a recorded tool call, typed for assertions. */
+function notionPropertyList(args: Record<string, unknown>) {
+  return notionPropertyListSchema.parse(args).properties;
+}
 
 type StubCall = {
   /** Path below `/v1`, e.g. `search` or `databases/db-opp/query`. */
@@ -694,5 +713,333 @@ describe("hashRow", () => {
     expect(hashRow(FOLLOW_UP)).toBe(
       "1e1252f29c6a614032f6096e3cc474927c86332b6525ff0c4435cc96d609030f",
     );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Notion rows over Composio
+//
+// The adapter picks the transport, so these drive the same
+// `notionAdapter.push` with a connector row that holds no Notion token and a
+// COMPOSIO_API_KEY in the environment. Every response is queued: no network.
+// ---------------------------------------------------------------------------
+
+const INTERVIEW: InterviewRow = {
+  kind: "interview",
+  key: "int-1",
+  jobId: "1",
+  company: "Acme",
+  role: "Platform Engineer",
+  interviewId: "iv-1",
+  scheduledAt: "2026-09-20T15:00:00.000Z",
+  durationMins: 45,
+  interviewType: "technical",
+  outcome: null,
+};
+
+type ToolCall = { slug: string; body: Record<string, unknown> };
+
+/** Records every `POST /tools/execute/{slug}` and answers from a queue. */
+function createComposioStub(responses: unknown[]) {
+  const calls: ToolCall[] = [];
+  const queue = [...responses];
+  const fetchImpl: typeof fetch = async (input, init) => {
+    const url = String(input instanceof Request ? input.url : input);
+    const match = /\/tools\/execute\/([A-Z0-9_]+)$/.exec(url);
+    expect(match).not.toBeNull();
+    const raw = init?.body;
+    calls.push({
+      slug: match?.[1] ?? "",
+      body: typeof raw === "string" ? JSON.parse(raw) : {},
+    });
+    if (queue.length === 0) throw new Error(`no queued response for ${url}`);
+    return jsonResponse(queue.shift());
+  };
+  return { fetchImpl, calls };
+}
+
+/** A tool execution Composio considers a success. */
+function toolOk(data: unknown = {}) {
+  return { successful: true, error: null, data };
+}
+
+function toolArguments(call: ToolCall | undefined): Record<string, unknown> {
+  const args = call?.body.arguments;
+  expect(args && typeof args === "object").toBe(true);
+  return (args ?? {}) as Record<string, unknown>;
+}
+
+function composioContext(fetchImpl: typeof fetch): ConnectorAdapterContext {
+  return createContext({
+    fetchImpl,
+    credentials: null,
+    config: { databaseIds: ALL_DATABASE_IDS },
+  });
+}
+
+describe("notion rows over composio", () => {
+  beforeEach(() => {
+    vi.stubEnv("COMPOSIO_API_KEY", "ck_test_key");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("carries every column of every lane as a typed flat property", async () => {
+    const stub = createComposioStub([
+      // One key lookup and one insert per lane, in lane order.
+      toolOk({ results: [] }),
+      toolOk({ id: "page-opp" }),
+      toolOk({ results: [] }),
+      toolOk({ id: "page-app" }),
+      toolOk({ results: [] }),
+      toolOk({ id: "page-int" }),
+      toolOk({ results: [] }),
+      toolOk({ id: "page-fu" }),
+    ]);
+
+    // Fully populated rows: a column whose value is empty is deliberately
+    // omitted (see the `toComposioProperties` tests), so coverage is only
+    // meaningful when every cell has a value.
+    const report = await notionAdapter.push(composioContext(stub.fetchImpl), {
+      rows: [
+        OPPORTUNITY,
+        {
+          ...APPLICATION,
+          outcome: "pending",
+          lastResumeViewAt: "2026-09-12T08:00:00.000Z",
+        },
+        { ...INTERVIEW, outcome: "passed" },
+        {
+          ...FOLLOW_UP,
+          dueDate: "2026-09-22",
+          reason: "resume opened 3x, no reply in 5d",
+        },
+      ],
+      known: new Map(),
+    });
+
+    expect(report.failures).toEqual([]);
+    expect(report.results.map((row) => row.outcome)).toEqual([
+      "created",
+      "created",
+      "created",
+      "created",
+    ]);
+
+    const inserts = stub.calls.filter(
+      (call) => call.slug === "NOTION_INSERT_ROW_DATABASE",
+    );
+    expect(inserts).toHaveLength(4);
+
+    const lanes: ConnectorEntityKind[] = [
+      "opportunity",
+      "application",
+      "interview",
+      "follow_up",
+    ];
+    lanes.forEach((kind, index) => {
+      const args = toolArguments(inserts[index]);
+      expect(args.database_id).toBe(ALL_DATABASE_IDS[kind]);
+      const sent = notionPropertyList(args);
+      // Every column the lane's database was provisioned with, with the type
+      // that database uses. A column missing here is a silently empty cell.
+      expect(sent.map((property) => [property.name, property.type])).toEqual(
+        NOTION_COLUMNS[kind].map((column) => [column.name, column.type]),
+      );
+      expect(sent.every((property) => typeof property.value === "string")).toBe(
+        true,
+      );
+    });
+  });
+
+  it("sends the opportunity row's values, not just its title", async () => {
+    const stub = createComposioStub([
+      toolOk({ results: [] }),
+      toolOk({ id: "page-opp" }),
+    ]);
+
+    await notionAdapter.push(composioContext(stub.fetchImpl), {
+      rows: [OPPORTUNITY],
+      known: new Map(),
+    });
+
+    const args = toolArguments(stub.calls[1]);
+    expect(notionPropertyList(args)).toEqual([
+      { name: "Key", type: "title", value: "job-1" },
+      { name: "Job ID", type: "rich_text", value: "1" },
+      { name: "Company", type: "rich_text", value: "Acme" },
+      { name: "Role", type: "rich_text", value: "Platform Engineer" },
+      { name: "Location", type: "rich_text", value: "London" },
+      { name: "Source", type: "select", value: "linkedin" },
+      {
+        name: "Job URL",
+        type: "url",
+        value: "https://acme.example/jobs/1",
+      },
+      { name: "Salary", type: "rich_text", value: "£80k-£95k" },
+      { name: "Score", type: "number", value: "87" },
+      {
+        name: "Score Reason",
+        type: "rich_text",
+        value: "Kubernetes plus Go, sponsors visas",
+      },
+      { name: "Sponsor Score", type: "number", value: "62" },
+      { name: "Remote", type: "checkbox", value: "True" },
+      { name: "Date Posted", type: "date", value: "2026-09-01" },
+      {
+        name: "Discovered At",
+        type: "date",
+        value: "2026-09-10T12:00:00.000Z",
+      },
+      { name: "Status", type: "select", value: "new" },
+    ]);
+  });
+
+  it("updates by row_id instead of inserting a second row", async () => {
+    const stub = createComposioStub([
+      // The key lookup finds the row already in the database.
+      toolOk({
+        results: [
+          {
+            id: "page-existing",
+            properties: { Key: { title: [{ plain_text: "job-1" }] } },
+          },
+        ],
+      }),
+      toolOk({ id: "page-existing" }),
+    ]);
+
+    const report = await notionAdapter.push(composioContext(stub.fetchImpl), {
+      rows: [opportunity({ status: "applied" })],
+      known: new Map(),
+    });
+
+    expect(stub.calls.map((call) => call.slug)).toEqual([
+      "NOTION_QUERY_DATABASE_WITH_FILTER",
+      "NOTION_UPDATE_ROW_DATABASE",
+    ]);
+    expect(toolArguments(stub.calls[0])).toMatchObject({
+      database_id: "db-opp",
+      filter: { property: "Key", title: { equals: "job-1" } },
+    });
+    // `row_id`, never `database_id`: the update tool rejects the latter.
+    expect(toolArguments(stub.calls[1])).toMatchObject({
+      row_id: "page-existing",
+    });
+    expect(toolArguments(stub.calls[1])).not.toHaveProperty("database_id");
+    expect(report.results).toEqual([
+      {
+        entityKind: "opportunity",
+        entityId: "job-1",
+        outcome: "updated",
+        remoteId: "page-existing",
+        remoteUrl: "https://www.notion.so/pageexisting",
+      },
+    ]);
+  });
+
+  it("sends nothing at all for a row the ledger already matches", async () => {
+    const stub = createComposioStub([]);
+
+    const report = await notionAdapter.push(composioContext(stub.fetchImpl), {
+      rows: [OPPORTUNITY],
+      known: new Map([
+        [
+          "opportunity:job-1",
+          ledgerRecord({
+            entityKind: "opportunity",
+            entityId: "job-1",
+            contentHash: hashRow(OPPORTUNITY),
+            remoteId: "page-existing",
+          }),
+        ],
+      ]),
+    });
+
+    expect(stub.calls).toEqual([]);
+    expect(report.results).toEqual([
+      {
+        entityKind: "opportunity",
+        entityId: "job-1",
+        outcome: "unchanged",
+        remoteId: "page-existing",
+        remoteUrl: "https://www.notion.so/page1",
+      },
+    ]);
+  });
+
+  it("fails the row when Composio answers 200 with successful:false", async () => {
+    const stub = createComposioStub([
+      toolOk({ results: [] }),
+      {
+        successful: false,
+        error: "Score is expected to be rich_text",
+        data: {},
+      },
+    ]);
+
+    const report = await notionAdapter.push(composioContext(stub.fetchImpl), {
+      rows: [OPPORTUNITY],
+      known: new Map(),
+    });
+
+    expect(report.results).toEqual([]);
+    expect(report.failures).toHaveLength(1);
+    // The tool, the rejected field, and the one builder to correct.
+    const message = report.failures[0]?.errorMessage ?? "";
+    expect(message).toContain("NOTION_INSERT_ROW_DATABASE");
+    expect(message).toContain("Score is expected to be rich_text");
+    expect(message).toContain("notionInsertRowArguments");
+  });
+
+  it("refuses to guess when a queried row list is unreadable", async () => {
+    const stub = createComposioStub([toolOk({ unexpected: "shape" })]);
+
+    const report = await notionAdapter.push(composioContext(stub.fetchImpl), {
+      rows: [OPPORTUNITY],
+      known: new Map(),
+    });
+
+    // Writing blind here would duplicate a row that already exists, so the
+    // lane fails instead.
+    expect(report.results).toEqual([]);
+    expect(report.failures[0]?.errorMessage).toContain(
+      "NOTION_QUERY_DATABASE_WITH_FILTER",
+    );
+  });
+});
+
+describe("toComposioProperties", () => {
+  it("omits a column whose value has no string that means empty", () => {
+    const properties = toComposioProperties(FOLLOW_UP);
+    const names = properties.map((property) => property.name);
+
+    // `Due Date` is null and a date has no empty spelling, so it is left out
+    // rather than sent as something Notion would reject.
+    expect(names).not.toContain("Due Date");
+    // Text clears with an empty string, and a checkbox always has a value.
+    expect(properties).toContainEqual({
+      name: "Reason",
+      type: "rich_text",
+      value: "",
+    });
+    expect(properties).toContainEqual({
+      name: "Completed",
+      type: "checkbox",
+      value: "False",
+    });
+  });
+
+  it("truncates rich text at the same limit as the direct payload", () => {
+    const properties = toComposioProperties(
+      opportunity({ scoreReason: "x".repeat(2500) }),
+    );
+    const reason = properties.find(
+      (property) => property.name === "Score Reason",
+    );
+
+    expect(reason?.value).toHaveLength(NOTION_RICH_TEXT_LIMIT);
   });
 });

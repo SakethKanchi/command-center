@@ -1,100 +1,140 @@
 # Two-minute demo script
 
-Timings are cumulative. Everything below has been run end to end; nothing is
-staged for the camera.
+Beats are wall-clock and cumulative; they sum to 120 seconds. Every step below
+is performable against the current app — nothing here is staged, and nothing
+that has not been run live appears in the script.
 
 ## Before you record
 
 ```bash
 npm install
 npm run migrate
-npm run seed                  # real postings from a keyless aggregator
+npm run seed                  # real postings from the six keyless boards
 
 cp .env.example .env          # set LLM_API_KEY — a funded key, see below
-npm run connect google        # Sheets + Gmail send, one consent
-npm run connect notion        # integration token + parent page
-npm run connect status        # expect three ✓
+composio login                # user key, read straight from ~/.composio
+npm run connect status        # see which transport each app is on
 
 npm run dev                   # API :8787, dashboard :5173
 ```
 
 Open `http://localhost:5173`.
 
-Two things to settle first:
+Four things to settle first:
 
-1. **Use a funded LLM key.** A rate-limited free model will stall mid-run or
-   miss the outreach JSON schema, which turns the best 20 seconds of the demo
-   into a spinner.
-2. **Rehearse on one specific posting.** Run the agent once in `dry_run` on the
-   row you plan to click. If the fabrication gate halts it, you have a choice:
-   pick a different row, or keep it and demo the halt on purpose — the halt is
-   the stronger story. Decide before you hit record.
+1. **Use a funded LLM key.** A rate-limited free model stalls mid-run, which
+   turns the best 30 seconds of the demo into a spinner.
+2. **Have at least one app connected and green on `/apps`.** Either
+   `composio login` (no key copied anywhere) or `COMPOSIO_API_KEY` in `.env`;
+   direct OAuth also works and wins when both exist.
+3. **Rehearse on one specific posting.** Run the agent once in `dry_run` on the
+   row you plan to click and time it. If the verification gate halts it, you
+   have a choice: pick a different row, or keep it and demo the halt on purpose
+   — the halt is the stronger story. Decide before you hit record.
+4. **Have a resume file on the desktop** (`.pdf`, `.docx`, `.txt` or `.md`) for
+   the import beat.
 
-## 0:00–0:15 — The problem, on screen
+Order matters in one place: the filter beat quotes result counts from the seeded
+corpus, and discovery adds rows. Filter first, discover second.
 
-Land on the dashboard. The four tiles are already populated from real ingested
-postings.
+## 0:00–0:10 — Real data, not a fixture
 
-> "These are real job postings, pulled from live boards. The problem was never
-> finding them — it's that every application is forty minutes of tailoring,
-> emailing, and spreadsheet bookkeeping spread across four different apps."
+Land on `/`. The result list is already full of postings ingested from live
+boards.
 
-Point at the three connector cards — Sheets, Notion, Gmail — all connected.
+> "Real postings, pulled from live job boards. Finding them was never the
+> problem — every application after that is forty minutes of tailoring,
+> emailing and spreadsheet bookkeeping across four apps."
 
-## 0:15–0:35 — Fire the agent
+## 0:10–0:30 — Filtering is exact, and it is in the URL
 
-Opportunities tab → your chosen row → **Apply For Me**.
+In the filter rail, tick **python** under *Skills*: the count drops to 16. Tick
+**senior** under *Level*: 11.
 
-> "One agent, one posting. Ten steps across five external systems. Watch the
-> trace."
+> "Skills and levels are namespaced tags, pulled out of each posting's own words
+> when it lands — deterministic, offline, no model call. Two skills widen the
+> set; a skill plus a level narrows it. Sixteen to eleven."
 
-The trace fills in live. Call out the app badge on each row as it lands — LLM,
-Local, Gmail, Sheets, Notion. That badge column is the multi-app story; let the
-judges read it.
+Point at the address bar.
 
-## 0:35–1:05 — The gate is the point
+> "Every filter is in the URL. This result set is a link I can send you, and the
+> back button walks it backwards."
 
-Stop on step 4, `verify_resume`.
+## 0:30–0:48 — Discovery, live against the boards
 
-> "Before anything leaves this machine, two deterministic checks. ATS
-> parseability, scored out of a hundred against eight weighted dimensions. And
-> a fabrication gate that pulls every numeric claim out of the generated copy
-> and checks it against my actual profile."
+Press **Board search**, type a keyword, run it.
 
-If the run halted here:
+> "That was filtering rows I already had. This goes and asks the boards."
+
+Let the per-source report land.
+
+> "Per source, because any one board can fail on its own. It also says which
+> filters the board honoured and which the app had to apply itself — ten results
+> means two different things in those two cases, and collapsing that into one
+> number is a lie in both directions. The three per-company ATS boards are
+> skipped, and they say why: they need a board token I have not given them."
+
+## 0:48–1:05 — The profile is the source of truth
+
+Go to `/profile`. Under **Import a resume**, drop the file on the zone or use
+*choose a file*.
+
+> "The fabrication gate needs something to check against, so the profile is the
+> single source of truth — which is exactly why the importer refuses to guess.
+> An email or phone number that does not appear verbatim in the file is dropped
+> with a warning, and an extracted name that looks like a company is refused."
+
+The parsed draft appears for review. Discard it.
+
+> "And an import is never an autosave. It arrives as a draft, I accept it, and
+> only the save button writes anything."
+
+## 1:05–1:35 — One run, and the gate is the point
+
+Back to `/`, your rehearsed row, **Apply for me**. The trace streams into
+`/runs`.
+
+> "One agent, one posting. A fixed ten-step plan across five external systems.
+> The model picks the score and the copy; it does not pick the steps — the tool
+> list is a closed union, so an invented tool name fails the run instead of
+> improvising."
+
+Call out the app badge on each row as it lands — LLM, Local. Then stop on step
+4, `verify_resume`.
+
+> "Before anything leaves this machine: ATS parseability out of a hundred across
+> eight weighted dimensions, and a fabrication check that pulls every numeric
+> claim out of the generated copy and tests it against my profile. Below seventy,
+> or one unsupported claim, and the plan halts here."
+
+If it halted:
 
 > "This run stopped. The model wrote a claim my profile doesn't support, so the
-> agent refused to send it. That's the whole design — it would rather do
-> nothing than lie to a recruiter."
+> agent refused to carry it further. That is the whole design — it would rather
+> do nothing than lie to a recruiter."
 
-If it passed, say that in one line and move on. Do not linger.
+If it passed, say so in one line — "94 out of 100, zero unsupported claims" —
+and move on. Do not linger.
 
-## 1:05–1:25 — Human in the loop, then the fan-out
+> "And the send step is never unattended. In live mode it parks the exact
+> payload and waits for a named decision."
 
-Step 6 is parked on `awaiting_approval` with the full draft visible.
+## 1:35–1:50 — Three apps, no OAuth project
 
-> "It will not send unattended. Here is the exact message it wants to send. I
-> approve it —"
+Go to `/apps`. The connected card is green.
 
-Click **Approve and send**.
+> "Gmail, Sheets and Notion each have a direct client, and direct credentials
+> win when you have them. I don't — so this connected on a hosted consent link:
+> no Google Cloud project, no client secret anywhere in this repo."
 
-> "— and the same application lands in Gmail's sent folder, a Google Sheet, and
-> a Notion database, rendered from one snapshot so the three can't disagree."
+> "Composio issues two kinds of credential. A team project key goes in the
+> environment. A personal login issues only a user key, which needs different
+> headers and a tool-router session to execute anything at all. This app
+> supports both, and it read the one already on this machine from the CLI login
+> — so no secret was copied into a dotfile. Notion rows land fully typed:
+> number, checkbox, select, date, url."
 
-Have the Sheet open in one tab and Notion in another. Same rows, four lanes
-each.
-
-## 1:25–1:45 — Idempotency, live
-
-Press **Sync all apps** twice.
-
-> "Second sync: zero writes. Every row is content-hashed, so re-running is a
-> no-op instead of duplicating your pipeline. Same guarantee on the agent — a
-> retried run reuses its recorded result instead of emailing twice."
-
-Every row reports `unchanged`.
-
-## 1:45–2:00 — How we know it works
+## 1:50–2:00 — How we know it works
 
 Terminal:
 
@@ -102,20 +142,25 @@ Terminal:
 npm run eval
 ```
 
-> "Golden cases built from real postings, graded against reference labels, with
-> hard gates. It runs offline from recorded output, so it's free and
-> deterministic in CI — and it fails the build when quality regresses."
+> "Twenty golden cases built from real postings, graded against reference
+> labels, with hard gates. It replays recorded model output, so it is free,
+> offline and deterministic in CI — and it fails the build when quality
+> regresses. Six hundred and five tests behind it, and not one of them makes a
+> network call, because every outbound client takes its `fetch` by injection."
 
-Last thing on screen: the `PASS` line.
+Last thing on screen: the `PASS — every gate met` line.
 
-## If something breaks mid-take
+## If something drags mid-take
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Agent errors on a credit/402 | LLM key exhausted | new key in `.env`, restart |
-| `Not configured` on a push step | connector missing | `npm run connect status` |
+| Run is slower than 30s | model latency | fire **Apply for me** at the end of the discovery beat and narrate the profile while it works |
+| Agent errors on a credit/402 | LLM key exhausted | new key in `.env` or on `/settings`, no restart needed |
+| `Not configured` on a push step | no transport for that app | `npm run connect status` |
+| Card on `/apps` is not green | account is FAILED or EXPIRED | press Connect again; only an ACTIVE account is ever bound |
 | Render step fails | typst missing | `typst --version`, then reinstall |
-| Empty dashboard | nothing ingested | `npm run seed` |
+| Empty result list | nothing ingested | `npm run seed` |
+| Counts are not 16 and 11 | discovery already ran | quote the counts on screen instead |
 
 ## One-command fallback
 

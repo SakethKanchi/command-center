@@ -17,6 +17,7 @@ import { badRequest, toAppError } from "@server/infra/errors";
 import { logger } from "@server/infra/logger";
 import type { RepoBundle } from "@server/repos";
 import {
+  ensureComposioNotionDatabases,
   ensureComposioSpreadsheet,
   providerAuthMode,
 } from "./composio/service";
@@ -270,19 +271,20 @@ export async function pushCommandCenter(
         });
         continue;
       }
+      // Resolve and persist the destination before the adapter runs: the ids
+      // then survive a failure mid-push, and the adapter reads them off the
+      // row it is handed, so re-reading the row here is load-bearing.
+      const composioDeps = {
+        repos: deps.repos,
+        ...(deps.fetchImpl === undefined ? {} : { fetchImpl: deps.fetchImpl }),
+      };
       if (provider === "google_sheets") {
-        // Resolve and persist the spreadsheet before the adapter runs: the id
-        // then survives a failure mid-push, and the adapter reads it off the
-        // row it is handed, so re-reading the row here is load-bearing.
-        await ensureComposioSpreadsheet({
-          repos: deps.repos,
-          ...(deps.fetchImpl === undefined
-            ? {}
-            : { fetchImpl: deps.fetchImpl }),
-        });
-        connector =
-          deps.repos.connectors.getByProvider(provider, "default") ?? connector;
+        await ensureComposioSpreadsheet(composioDeps);
+      } else {
+        await ensureComposioNotionDatabases(composioDeps);
       }
+      connector =
+        deps.repos.connectors.getByProvider(provider, "default") ?? connector;
     }
 
     const adapter = ROW_CONNECTOR_ADAPTERS[provider];

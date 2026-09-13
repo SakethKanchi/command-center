@@ -168,23 +168,102 @@ export function gmailSendArguments(
 export function notionCreatePageArguments(input: {
   parentId: string;
   title: string;
+  /** Body as Notion-flavoured markdown. Mutually exclusive with children. */
+  markdown?: string | null;
 }): Record<string, unknown> {
+  const markdown = input.markdown?.trim();
   return {
     parent_id: input.parentId,
     title: input.title,
+    // `markdown` is documented as mutually exclusive with the children and
+    // content parameters, so it is the only body channel used here.
+    ...(markdown ? { markdown } : {}),
   };
 }
 
+/**
+ * Body blocks for `NOTION_ADD_MULTIPLE_PAGE_CONTENT`.
+ *
+ * The simplified block format is `{content, block_property}` — the inner key
+ * is `content`. The previous builder nested a second `content_block` key
+ * inside the block, which the tool does not read, so the text silently
+ * arrived empty.
+ */
 export function notionAddContentArguments(input: {
   pageId: string;
   content: string;
 }): Record<string, unknown> {
   return {
     parent_block_id: input.pageId,
-    content_block: {
-      block_property: "paragraph",
-      content_block: input.content,
-    },
+    content_blocks: [{ content: input.content, block_property: "paragraph" }],
+  };
+}
+
+export function notionCreateDatabaseArguments(input: {
+  /** MUST be a page id: Notion refuses a database parented by a database. */
+  parentPageId: string;
+  title: string;
+  properties: Array<{ name: string; type: string }>;
+}): Record<string, unknown> {
+  return {
+    parent_id: input.parentPageId,
+    title: input.title,
+    properties: input.properties,
+  };
+}
+
+export function notionInsertRowArguments(input: {
+  databaseId: string;
+  properties: Array<{ name: string; type: string; value: string }>;
+}): Record<string, unknown> {
+  return {
+    database_id: input.databaseId,
+    properties: input.properties,
+  };
+}
+
+export function notionUpdateRowArguments(input: {
+  /** The row's PAGE uuid. Passing a database id here is an error. */
+  pageId: string;
+  properties: Array<{ name: string; type: string; value: string }>;
+}): Record<string, unknown> {
+  return {
+    row_id: input.pageId,
+    properties: input.properties,
+  };
+}
+
+/**
+ * Query one lane for the rows carrying these keys. `Key` is the database's
+ * title property, so the filter type is `title` — Notion's only filter for it.
+ */
+export function notionQueryByKeyArguments(input: {
+  databaseId: string;
+  keyProperty: string;
+  keys: string[];
+  pageSize?: number;
+}): Record<string, unknown> {
+  const conditions = input.keys.map((key) => ({
+    property: input.keyProperty,
+    title: { equals: key },
+  }));
+  return {
+    database_id: input.databaseId,
+    // A compound filter needs two or more conditions; one key goes bare.
+    filter: conditions.length === 1 ? conditions[0] : { or: conditions },
+    page_size: input.pageSize ?? 100,
+  };
+}
+
+export function notionFetchDatabasesArguments(input: {
+  query?: string | null;
+  pageSize?: number;
+}): Record<string, unknown> {
+  const query = input.query?.trim();
+  return {
+    fetch_type: "databases",
+    page_size: input.pageSize ?? 100,
+    ...(query ? { query } : {}),
   };
 }
 

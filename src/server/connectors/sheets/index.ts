@@ -34,7 +34,6 @@ import {
   batchUpdate,
   getSpreadsheet,
   getValues,
-  parseSheetsConfig,
   sheetsConfigSchema,
   sheetsCredentialsSchema,
   updateValues,

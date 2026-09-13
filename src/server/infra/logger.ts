@@ -1,17 +1,34 @@
 /**
  * Structured line logger.
  *
- * One JSON object per line when `LOG_FORMAT=json`, otherwise a compact human
+ * One JSON object per line when the format is `json`, otherwise a compact human
  * form. No dependency and no transport: the agent's durable trace lives in
- * SQLite, so logs only need to be readable during a demo.
+ * SQLite, so logs only need to be readable during a demo and machine-parseable
+ * in production.
+ *
+ * The level and format are not read from the environment here. Boot validates
+ * them in `@server/infra/config` and pushes them in via `configureLogger`, so
+ * there is exactly one place where `LOG_LEVEL=verbose` is rejected. Until that
+ * call the defaults below apply, which is what makes a log line emitted while
+ * the configuration is still being parsed safe.
  */
 
-const LEVELS = { debug: 10, info: 20, warn: 30, error: 40 } as const;
-type Level = keyof typeof LEVELS;
+import type { LogFormat, LogLevel } from "@server/infra/config";
 
-const threshold =
-  LEVELS[(process.env.LOG_LEVEL as Level | undefined) ?? "info"] ?? LEVELS.info;
-const asJson = process.env.LOG_FORMAT === "json";
+const LEVELS = { debug: 10, info: 20, warn: 30, error: 40 } as const;
+type Level = LogLevel;
+
+let threshold: number = LEVELS.info;
+let asJson = false;
+
+/** Apply validated settings. Called once at boot, before the server listens. */
+export function configureLogger(options: {
+  level: LogLevel;
+  format: LogFormat;
+}): void {
+  threshold = LEVELS[options.level];
+  asJson = options.format === "json";
+}
 
 function emit(level: Level, message: string, meta?: Record<string, unknown>) {
   if (LEVELS[level] < threshold) return;

@@ -35,11 +35,28 @@ const TABLE = `
     updated_at TEXT NOT NULL
   )`;
 
+/**
+ * Cached role suggestions, one row for the one profile.
+ *
+ * Kept out of the `profile` table so that a write of one never touches the
+ * other: saving an edited profile must invalidate suggestions, not silently
+ * carry stale ones forward, and `fingerprint` is what records which profile
+ * state the stored set describes.
+ */
+const SUGGESTIONS_TABLE = `
+  CREATE TABLE IF NOT EXISTS profile_role_suggestions (
+    profile_id   TEXT PRIMARY KEY,
+    fingerprint  TEXT NOT NULL,
+    model        TEXT NOT NULL,
+    suggestions  TEXT NOT NULL DEFAULT '[]',
+    generated_at TEXT NOT NULL
+  )`;
+
 const reconciled = new WeakSet<Db>();
 
 /** Empty for a table that does not exist, which is how absence is detected. */
-function profileColumns(db: Db): Set<string> {
-  const rows = db.prepare("PRAGMA table_info(profile)").all() as Array<{
+function tableColumns(db: Db, table: string): Set<string> {
+  const rows = db.prepare(`PRAGMA table_info(${table})`).all() as Array<{
     name: string;
   }>;
   return new Set(rows.map((column) => column.name));
@@ -56,7 +73,7 @@ export function ensureProfileSchema(db: Db): string[] {
   if (reconciled.has(db)) return [];
 
   const applied: string[] = [];
-  const columns = profileColumns(db);
+  const columns = tableColumns(db, "profile");
   if (columns.size === 0) {
     db.exec(TABLE);
     applied.push(TABLE.trim());
@@ -67,6 +84,11 @@ export function ensureProfileSchema(db: Db): string[] {
       "ALTER TABLE profile ADD COLUMN projects TEXT NOT NULL DEFAULT '[]'";
     db.exec(alter);
     applied.push(alter);
+  }
+
+  if (tableColumns(db, "profile_role_suggestions").size === 0) {
+    db.exec(SUGGESTIONS_TABLE);
+    applied.push(SUGGESTIONS_TABLE.trim());
   }
 
   reconciled.add(db);

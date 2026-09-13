@@ -20,6 +20,11 @@ import {
 import { logger } from "@server/infra/logger";
 import { fetchWithRetry } from "@server/infra/retry";
 import { z } from "zod";
+import {
+  type ComposioCredentialKind,
+  originOf,
+  resolveComposioCredential,
+} from "./credentials";
 
 export const COMPOSIO_API_BASE = "https://backend.composio.dev/api/v3.1";
 export const COMPOSIO_HTTP_TIMEOUT_MS = 20_000;
@@ -187,6 +192,10 @@ export type ComposioClientOptions = {
 
 export type ComposioClient = {
   readonly userId: string;
+  /** Which credential class is in play; the remedy differs per class. */
+  readonly kind: ComposioCredentialKind;
+  /** `environment` or `cli`, or null when no credential was found. */
+  readonly credentialSource: "environment" | "cli" | null;
   readonly baseUrl: string;
   listAuthConfigs(toolkitSlug: string): Promise<ComposioAuthConfig[]>;
   createAuthConfig(toolkitSlug: string): Promise<ComposioAuthConfig>;
@@ -196,8 +205,9 @@ export type ComposioClient = {
     callbackUrl?: string | null;
   }): Promise<ComposioLink>;
   getConnectedAccount(id: string): Promise<ComposioConnectedAccount>;
+  /** Omit the slug to list every connected account for the entity. */
   listConnectedAccounts(
-    toolkitSlug: string,
+    toolkitSlug?: string,
   ): Promise<ComposioConnectedAccount[]>;
   deleteConnectedAccount(id: string): Promise<void>;
   executeTool(
@@ -362,20 +372,130 @@ export function clearComposioAuthConfigCache(): void {
 // Client
 // ---------------------------------------------------------------------------
 
+/**
+ * Resolve-once-per-process facts about a user-key account. Neither changes
+ * for the life of a login, and both are needed on every later request, so a
+ * ten-step agent run resolves them once rather than ten times.
+ */
+type ConsumerProject = { projectId: string; userId: string };
+const consumerProjects = new Map<string, Promise<ConsumerProject>>();
+const routerSessions = new Map<string, Promise<string>>();
+
+/** Composio's slug when a session has expired or was never opened. */
+export const COMPOSIO_SESSION_MISSING_SLUG = "ToolRouterV2_SessionNotFound";
+
+export function clearComposioSessionCache(): void {
+  consumerProjects.clear();
+  routerSessions.clear();
+}
+
+const consumerProjectSchema = z.object({
+  project_nano_id: z.string().min(1),
+  consumer_user_id: z.string().min(1),
+});
+
+const routerSessionSchema = z.object({
+  // The field is `session_id`. There is no `id`, and reading one yields
+  // "Tool router session with ID undefined not found".
+  session_id: z.string().min(1),
+});
+
+/**
+ * Which accounts a session may act through, and which toolkits need the user
+ * to reconnect.
+ *
+ * A toolkit can hold several accounts and a dead one outlives the working
+ * one: this user's Composio holds a FAILED `notion` and an EXPIRED `gmail`
+ * beside the ACTIVE pair. Binding by first-match would attach the corpse and
+ * report a connected app that cannot execute a single tool, so only ACTIVE
+ * accounts are ever bound.
+ */
+export function bindableAccounts(accounts: ComposioConnectedAccount[]): {
+  connected: Record<string, string>;
+  needsReconnect: { toolkitSlug: string; status: ComposioAccountStatus }[];
+} {
+  const byToolkit = new Map<string, ComposioConnectedAccount[]>();
+  for (const account of accounts) {
+    const slug = account.toolkitSlug ?? "";
+    if (slug === "") continue;
+    const bucket = byToolkit.get(slug);
+    if (bucket) bucket.push(account);
+    else byToolkit.set(slug, [account]);
+  }
+
+  const connected: Record<string, string> = {};
+  const needsReconnect: {
+    toolkitSlug: string;
+    status: ComposioAccountStatus;
+  }[] = [];
+  for (const [toolkitSlug, bucket] of byToolkit) {
+    const active = bucket.find((account) => account.status === "ACTIVE");
+    if (active) {
+      connected[toolkitSlug] = active.id;
+      continue;
+    }
+    const first = bucket[0];
+    if (first) needsReconnect.push({ toolkitSlug, status: first.status });
+  }
+  return { connected, needsReconnect };
+}
+
+/** A session that expired or never existed, by slug rather than by status. */
+function isSessionMissing(error: unknown): boolean {
+  const text = error instanceof Error ? error.message : String(error);
+  return text.includes(COMPOSIO_SESSION_MISSING_SLUG);
+}
+
 export function createComposioClient(
   options: ComposioClientOptions = {},
 ): ComposioClient {
-  const apiKey = (options.apiKey ?? process.env.COMPOSIO_API_KEY ?? "").trim();
+  const credential = resolveComposioCredential({
+    apiKey: options.apiKey,
+    baseUrl: options.baseUrl,
+  });
+  const apiKey = credential?.apiKey ?? "";
   const baseUrl = (options.baseUrl ?? COMPOSIO_API_BASE).replace(/\/+$/, "");
   const fetchImpl = options.fetchImpl ?? fetch;
-  const userId = (
+  const isUserKey = credential?.kind === "user";
+  /**
+   * The user path addresses a derived `consumer-<uuid>-<org>` entity, resolved
+   * below; only the project path uses a configurable id.
+   */
+  const configuredUserId = (
     options.userId ??
     process.env.COMPOSIO_USER_ID ??
     "primary"
   ).trim();
+  const cacheKey = `${baseUrl}::${apiKey}`;
+  /** Populated on the user path once the project resolve has run. */
+  let resolved: ConsumerProject | null = null;
+
+  /**
+   * Headers for one request, built in exactly one place.
+   *
+   * `x-project-id` is not optional on the user path: without it
+   * `GET /connected_accounts` answers HTTP 200 with an EMPTY list instead of
+   * an error, so a forgotten header reads as "you have no connected apps"
+   * rather than as a bug. Centralising this is what makes that
+   * unforgettable.
+   */
+  function authHeaders(): Record<string, string> {
+    const common = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    if (!isUserKey) return { ...common, "x-api-key": apiKey };
+    return {
+      ...common,
+      "x-user-api-key": apiKey,
+      ...(credential?.orgId ? { "x-org-id": credential.orgId } : {}),
+      ...(resolved ? { "x-project-id": resolved.projectId } : {}),
+    };
+  }
 
   async function request<T extends z.ZodTypeAny>(args: {
     method: "GET" | "POST" | "DELETE";
+    /** Relative to the versioned base, or absolute when it starts with `http`. */
     path: string;
     label: string;
     query?: Record<string, string | undefined>;
@@ -386,18 +506,25 @@ export function createComposioClient(
   }): Promise<z.infer<T>> {
     if (apiKey === "") throw unauthorized(COMPOSIO_MISSING_KEY_MESSAGE);
 
-    const url = new URL(`${baseUrl}${args.path}`);
+    // Every user-path request needs `x-project-id`, and without it the API
+    // answers 200-with-nothing or a bare "not found" rather than an auth
+    // error. Resolving here rather than at each call site is what stops a new
+    // endpoint from silently shipping without the header: the only request
+    // exempt is the resolve itself, which is what produces the id.
+    if (isUserKey && !resolved && !args.path.includes("/project/resolve")) {
+      await ensureConsumerProject();
+    }
+
+    const url = new URL(
+      args.path.startsWith("http") ? args.path : `${baseUrl}${args.path}`,
+    );
     for (const [key, value] of Object.entries(args.query ?? {})) {
       if (value !== undefined && value !== "") url.searchParams.set(key, value);
     }
 
     const init: RequestInit = {
       method: args.method,
-      headers: {
-        "x-api-key": apiKey,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+      headers: authHeaders(),
       ...(args.body === undefined ? {} : { body: JSON.stringify(args.body) }),
     };
 
@@ -449,8 +576,125 @@ export function createComposioClient(
     return parsed.data;
   }
 
+  /**
+   * The project and entity a user key acts as. Cached per key for the life of
+   * the process, and the in-flight promise is cached rather than the value so
+   * concurrent callers share one resolve instead of racing.
+   *
+   * Note the path is `/api/v3/`, not v3.1 — this endpoint exists only on v3.
+   */
+  async function ensureConsumerProject(): Promise<ConsumerProject> {
+    if (resolved) return resolved;
+    const existing = consumerProjects.get(cacheKey);
+    if (existing) {
+      resolved = await existing;
+      return resolved;
+    }
+
+    const pending = (async () => {
+      const payload = await request({
+        method: "POST",
+        path: `${originOf(baseUrl)}/api/v3/org/consumer/project/resolve`,
+        label: "resolve consumer project",
+        body: {},
+        schema: consumerProjectSchema,
+      });
+      return {
+        projectId: payload.project_nano_id,
+        userId: payload.consumer_user_id,
+      };
+    })();
+
+    consumerProjects.set(cacheKey, pending);
+    try {
+      resolved = await pending;
+      return resolved;
+    } catch (error) {
+      // A failed resolve must not poison every later call.
+      consumerProjects.delete(cacheKey);
+      throw error;
+    }
+  }
+
+  /** The entity id to address: derived on the user path, configured otherwise. */
+  async function currentUserId(): Promise<string> {
+    if (!isUserKey) return configuredUserId;
+    return (await ensureConsumerProject()).userId;
+  }
+
+  /**
+   * A tool-router session, bound to the accounts it may act on. Reused across
+   * tool calls: opening one per call would add a round trip to every step of
+   * an agent run.
+   */
+  async function ensureSession(
+    connectedAccountId?: string | null,
+  ): Promise<string> {
+    const project = await ensureConsumerProject();
+    const key = `${cacheKey}::${connectedAccountId ?? "all"}`;
+    const existing = routerSessions.get(key);
+    if (existing) return existing;
+
+    const pending = (async () => {
+      const accounts = await client.listConnectedAccounts();
+      const bindable = bindableAccounts(accounts);
+      const payload = await request({
+        method: "POST",
+        path: "/tool_router/session",
+        label: "open tool router session",
+        body: {
+          user_id: project.userId,
+          connected_accounts: bindable.connected,
+          manage_connections: { enable: true },
+        },
+        schema: routerSessionSchema,
+      });
+      return payload.session_id;
+    })();
+
+    routerSessions.set(key, pending);
+    try {
+      return await pending;
+    } catch (error) {
+      routerSessions.delete(key);
+      throw error;
+    }
+  }
+  /**
+   * Execute inside a tool-router session, reopening once if the session has
+   * gone. One retry only: a second miss is a real failure, and retrying
+   * forever would hide it behind a loop.
+   */
+  async function executeInSession(
+    slug: string,
+    input: {
+      arguments: Record<string, unknown>;
+      connectedAccountId?: string | null;
+    },
+  ): Promise<z.infer<typeof toolExecutionSchema>> {
+    const key = `${cacheKey}::${input.connectedAccountId ?? "all"}`;
+    const attempt = async (sessionId: string) =>
+      request({
+        method: "POST",
+        path: `/tool_router/session/${encodeURIComponent(sessionId)}/execute`,
+        label: `execute ${slug}`,
+        body: { tool_slug: slug, arguments: input.arguments },
+        schema: toolExecutionSchema,
+      });
+
+    try {
+      return await attempt(await ensureSession(input.connectedAccountId));
+    } catch (error) {
+      if (!isSessionMissing(error)) throw error;
+      routerSessions.delete(key);
+      return attempt(await ensureSession(input.connectedAccountId));
+    }
+  }
+
   const client: ComposioClient = {
-    userId,
+    userId: configuredUserId,
+    kind: credential?.kind ?? "project",
+    credentialSource: credential?.source ?? null,
     baseUrl,
 
     async listAuthConfigs(toolkitSlug) {
@@ -512,7 +756,7 @@ export function createComposioClient(
         label: "create connect link",
         body: {
           auth_config_id: args.authConfigId,
-          user_id: userId,
+          user_id: await currentUserId(),
           ...(args.callbackUrl ? { callback_url: args.callbackUrl } : {}),
         },
         schema: linkSchema,
@@ -550,7 +794,11 @@ export function createComposioClient(
         method: "GET",
         path: "/connected_accounts",
         label: "list connected accounts",
-        query: { user_ids: userId, toolkit_slugs: toolkitSlug },
+        query: {
+          user_ids: await currentUserId(),
+          toolkit_slugs: toolkitSlug,
+          limit: "100",
+        },
         schema: listOf(connectedAccountSchema),
       });
       return unwrapList(payload).map(toConnectedAccount);
@@ -567,21 +815,23 @@ export function createComposioClient(
     },
 
     async executeTool(slug, input) {
-      const payload = await request({
-        method: "POST",
-        path: `/tools/execute/${encodeURIComponent(slug)}`,
-        label: `execute ${slug}`,
-        body: {
-          user_id: userId,
-          arguments: input.arguments,
-          // v3.1 requires an explicit toolkit version for manual execution.
-          version: "latest",
-          ...(input.connectedAccountId
-            ? { connected_account_id: input.connectedAccountId }
-            : {}),
-        },
-        schema: toolExecutionSchema,
-      });
+      const payload = isUserKey
+        ? await executeInSession(slug, input)
+        : await request({
+            method: "POST",
+            path: `/tools/execute/${encodeURIComponent(slug)}`,
+            label: `execute ${slug}`,
+            body: {
+              user_id: configuredUserId,
+              arguments: input.arguments,
+              // v3.1 requires an explicit toolkit version for manual execution.
+              version: "latest",
+              ...(input.connectedAccountId
+                ? { connected_account_id: input.connectedAccountId }
+                : {}),
+            },
+            schema: toolExecutionSchema,
+          });
 
       // The single most important behaviour in this client: a tool call can
       // answer HTTP 200 and still have failed. Composio's own message is

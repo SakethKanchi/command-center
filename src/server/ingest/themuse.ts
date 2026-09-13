@@ -8,6 +8,7 @@ import {
   type HostAllowlist,
   htmlToText,
   joinLocations,
+  keywordTokens,
   matchesKeyword,
   type SourceAdapter,
   toIsoOrNull,
@@ -117,6 +118,70 @@ export function planThemuseLocation(input: {
 }
 
 /**
+ * Their category vocabulary, measured rather than taken from the docs: an
+ * unknown category is not an error, it returns zero rows, so every value here
+ * was checked against the live endpoint. `Engineering`, `IT`, `DevOps`,
+ * `Security`, `Finance`, `Operations` and `Legal` all read like categories and
+ * all answer with nothing, which is why they are absent.
+ *
+ * This is the only way to narrow a keyword on this board. Without it the
+ * keyword pass reads a hundred rows of a four-hundred-thousand-posting
+ * firehose and matches nothing, which is exactly what it did: a live
+ * "backend engineer" discovery returned zero from the Muse and five from
+ * everywhere else.
+ */
+const CATEGORY_BY_KEYWORD: Readonly<Record<string, string>> = {
+  engineer: "Software Engineering",
+  engineering: "Software Engineering",
+  developer: "Software Engineering",
+  software: "Software Engineering",
+  backend: "Software Engineering",
+  frontend: "Software Engineering",
+  fullstack: "Software Engineering",
+  platform: "Software Engineering",
+  devops: "Software Engineering",
+  sre: "Software Engineering",
+  infrastructure: "Software Engineering",
+  kubernetes: "Software Engineering",
+  python: "Software Engineering",
+  typescript: "Software Engineering",
+  golang: "Software Engineering",
+  rust: "Software Engineering",
+  java: "Software Engineering",
+  data: "Data and Analytics",
+  analytics: "Data and Analytics",
+  analyst: "Data and Analytics",
+  scientist: "Data and Analytics",
+  ml: "Data and Analytics",
+  product: "Product Management",
+  design: "Design and UX",
+  designer: "Design and UX",
+  ux: "Design and UX",
+  ui: "Design and UX",
+  sales: "Sales",
+  recruiter: "Human Resources and Recruitment",
+  recruiting: "Human Resources and Recruitment",
+  support: "Customer Service",
+  writer: "Writing and Editing",
+  teacher: "Education",
+};
+
+/**
+ * The category a keyword belongs to, or null when none of its words name one.
+ *
+ * First match wins and only one category travels: two OR-ed categories widen
+ * the set the local keyword pass then has to narrow again, which spends the
+ * page budget to end up where it started.
+ */
+export function planThemuseCategory(query: string): string | null {
+  for (const token of keywordTokens(query)) {
+    const category = CATEGORY_BY_KEYWORD[token];
+    if (category) return category;
+  }
+  return null;
+}
+
+/**
  * `page` is required and zero-based: omitting it is a 400, `page=-1` is
  * "too low", and `page=page_count` is "too high", so the last valid page is
  * `page_count - 1`.
@@ -124,6 +189,7 @@ export function planThemuseLocation(input: {
 export function themuseSearchUrl(input: {
   page: number;
   locations?: readonly string[];
+  category?: string | null;
 }): string {
   const params = new URLSearchParams({
     page: String(Math.max(0, Math.trunc(input.page))),
@@ -134,6 +200,7 @@ export function themuseSearchUrl(input: {
   for (const location of input.locations ?? []) {
     params.append("location", location);
   }
+  if (input.category) params.set("category", input.category);
   return `${SEARCH_URL}?${params.toString()}`;
 }
 
@@ -185,6 +252,10 @@ export const themuseAdapter: SourceAdapter = {
     // with its remote postings mixed in — and an unresolvable value is
     // answered with the remote bucket instead of an error.
     const filterPlace = wanted !== "" && !REMOTE_ONLY_PLACE.test(wanted);
+    // The keyword cannot travel, but the category it belongs to can, which is
+    // the difference between matching a hundred rows of the whole board and a
+    // hundred rows of the right discipline.
+    const category = query === "" ? null : planThemuseCategory(query);
 
     const kept: NewJob[] = [];
     let scanned = 0;
@@ -197,7 +268,7 @@ export const themuseAdapter: SourceAdapter = {
 
     for (let page = 0; page < MAX_PAGES && page < pageCount; page += 1) {
       const payload = (await fetchSourceJson({
-        url: themuseSearchUrl({ page, locations: plan.locations }),
+        url: themuseSearchUrl({ page, locations: plan.locations, category }),
         label: LABEL,
         allowedHosts: THEMUSE_HOSTS,
         fetchImpl: input.fetchImpl,
@@ -244,8 +315,11 @@ export const themuseAdapter: SourceAdapter = {
     }
 
     if (query !== "") {
+      const narrowed = category
+        ? `narrowed to category=${category}`
+        : "no category of theirs matches those words";
       notes?.push(
-        `the Muse has no keyword parameter; matched "${query}" locally over ${scanned} rows, dropping ${droppedKeyword}`,
+        `the Muse has no keyword parameter; ${narrowed} and matched "${query}" locally over ${scanned} rows, dropping ${droppedKeyword}`,
       );
     }
     if (filterPlace) {

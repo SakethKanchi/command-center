@@ -504,14 +504,39 @@ describe("source adapters", () => {
       notes,
     });
 
-    expect(
-      new URL(calls[0]?.url ?? "").searchParams.getAll("location"),
-    ).toEqual(["Flexible / Remote"]);
+    const requested = new URL(calls[0]?.url ?? "").searchParams;
+    expect(requested.getAll("location")).toEqual(["Flexible / Remote"]);
+    // "starlink" belongs to no category of theirs, and an unknown category
+    // returns zero rows rather than an error, so none is sent.
+    expect(requested.has("category")).toBe(false);
     // No keyword parameter exists at all, so the query is ours to apply.
     expect(jobs.map((job) => job.title)).toEqual([
       "Manager, Starlink Enterprise Sales",
     ]);
     expect(notes[0]).toContain("no keyword parameter");
+  });
+
+  it("narrows the muse to the keyword's discipline, the only filter it honours", async () => {
+    const { fetchImpl, calls } = makeFetch(() =>
+      jsonResponse(fixture("themuse-jobs")),
+    );
+    const notes: string[] = [];
+
+    const jobs = await themuseAdapter.fetchJobs({
+      query: "backend engineer",
+      limit: 25,
+      fetchImpl,
+      notes,
+    });
+
+    // Without this the keyword pass reads a hundred rows of a 400k-posting
+    // firehose: a live "backend engineer" run returned nothing from the Muse
+    // until the category travelled with the request.
+    expect(new URL(calls[0]?.url ?? "").searchParams.get("category")).toBe(
+      "Software Engineering",
+    );
+    expect(jobs.map((job) => job.company)).toEqual(["Nanit"]);
+    expect(notes[0]).toContain("narrowed to category=Software Engineering");
   });
 
   it("maps arbeitnow, trusting its own remote flag over German place names", async () => {

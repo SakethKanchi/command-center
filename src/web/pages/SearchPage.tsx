@@ -11,6 +11,7 @@ import { FilterRail } from "@web/components/search/FilterRail";
 import { activeChips, narrowestFilter } from "@web/components/search/filters";
 import { JobDrawer } from "@web/components/search/JobDrawer";
 import { ResultList } from "@web/components/search/ResultList";
+import { RoleSuggestions } from "@web/components/search/RoleSuggestions";
 import { SearchBar } from "@web/components/search/SearchBar";
 import { ApiError, api } from "@web/lib/api";
 import { fetchLocations } from "@web/lib/discover";
@@ -254,6 +255,8 @@ export function SearchPage() {
         onSort={(sort: JobSort) => patch({ sort })}
         busy={loading}
       />
+
+      <RoleSuggestions activeQuery={query.q ?? ""} onPick={commitNow} />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="u-mono text-[12.5px] text-ink-dim" aria-live="polite">
