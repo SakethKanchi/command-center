@@ -6,6 +6,17 @@ automated quality gate.
 
 Built for the [Multi-App AI Agent Hackathon](https://multiappagenthackathon.com/).
 
+## Demo
+
+https://github.com/SakethKanchi/command-center/raw/main/docs/demo.mp4
+
+![Command Center demo](docs/demo.gif)
+
+Forty-three seconds, recorded against the running app: live postings, the
+profile, the pipeline, a run that halts on a named step, a dry run that
+completes, three connected apps, and the thresholds that stop a run.
+([download the MP4](docs/demo.mp4))
+
 - **[SYSTEM_BRIEF.md](SYSTEM_BRIEF.md)** — architecture, reliability design, limits
 - **[DEMO.md](DEMO.md)** — two-minute demo script
 - **[evals/README.md](evals/README.md)** — the evaluation harness
