@@ -17,6 +17,10 @@ export function App() {
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<SearchPage />} />
+        {/* The sidebar calls this section "Search", so the obvious URL has to
+            answer. `/` stays the canonical home; `/search` renders the same
+            screen rather than a 404 that contradicts the nav. */}
+        <Route path="search" element={<SearchPage />} />
         <Route path="pipeline" element={<PipelinePage />} />
         <Route path="runs" element={<RunsPage />} />
         <Route path="runs/:runId" element={<RunsPage />} />
