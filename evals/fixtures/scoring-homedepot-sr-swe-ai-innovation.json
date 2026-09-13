@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-homedepot-sr-swe-ai-innovation",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 75,
+    "reason": "The candidate's core expertise in RAG and AI workflows aligns perfectly with the role, though they have ~2 years of experience while the preferred qualification is 5+ years."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "slug": "director-ai-automation-onemedia-germany-munich-249102",
+      "company_name": "Onemedia Consulting",
+      "title": "Director AI & Automation",
+      "description": "<p>We are looking for a <strong>Director AI &amp; Automation</strong> to own our technology strategy and architect automation across the agency.</p>",
+      "remote": false,
+      "url": "https://www.arbeitnow.com/jobs/companies/onemedia-consulting/director-ai-automation-onemedia-germany-munich-249102",
+      "location": "Onemedia Germany, Munich",
+      "created_at": 1789330195
+    },
+    {
+      "slug": "remote-kubernetes-administrator-private-cloud-engineer-karlsruhe-90810",
+      "company_name": "virtual7 GmbH",
+      "title": "Kubernetes Administrator/Private Cloud Engineer (m/w/d)",
+      "description": "<p>Als IT-Dienstleister treiben wir die Digitalisierung des &ouml;ffentlichen Sektors voran.</p><p>Du administrierst Kubernetes-Cluster und baust unsere Private Cloud weiter aus.</p>",
+      "remote": true,
+      "url": "https://www.arbeitnow.com/jobs/companies/virtual7-gmbh/remote-kubernetes-administrator-private-cloud-engineer-karlsruhe-90810",
+      "location": "Homeoffice",
+      "created_at": 1789309822
+    },
+    {
+      "slug": "unusable-posting-no-url-000000",
+      "company_name": "Ghost Recruiting",
+      "title": "Posting With No Link",
+      "description": "<p>Dropped: the board sometimes emits a row before the public page exists.</p>",
+      "remote": false,
+      "url": "",
+      "location": "Hamburg",
+      "created_at": 1789330000
+    }
+  ]
+}

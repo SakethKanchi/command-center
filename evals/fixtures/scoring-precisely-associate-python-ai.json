@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-precisely-associate-python-ai",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 72,
+    "reason": "Candidate exceeds the 1+ year Python requirement with strong RAG and AI experience, plus TypeScript/Node.js and REST API knowledge. Fully remote US role matches location. However, the 'Associate' title and '1+ years' framing suggest an entry-level role below the candidate's 2+ years experience, slightly limiting growth fit."
+  }
+}

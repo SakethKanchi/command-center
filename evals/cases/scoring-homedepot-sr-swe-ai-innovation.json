@@ -1,0 +1,66 @@
+{
+  "id": "scoring-homedepot-sr-swe-ai-innovation",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "e72e57f9-d459-4790-b4af-32fbb7b37bad",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "e72e57f9-d459-4790-b4af-32fbb7b37bad",
+      "title": "SR. SOFTWARE ENGINEER (AI Innovation)",
+      "employer": "HOME DEPOT U.S.A., INC.",
+      "location": "United States",
+      "isRemote": true,
+      "salary": "USD 80,000–180,000/year",
+      "jobLevel": "senior",
+      "jobDescription": "With a career at The Home Depot, you can be yourself and also be part of something bigger.\n\n### Position Purpose:\n\nThe Sr. Software Engineer is responsible for independently developing and consistently redesigning/refactoring a product to adapt to our customers and associates needs. As a Sr. Software Engineer, you will be part of a dynamic team with engineers of all experience levels who help each other build and grow technical and leadership skills while creating, deploying, and supporting production applications. In addition, Sr. Software Engineers may be involved in product and tool selection, configuration, security, resilience, performance tuning and production monitoring as well as mentoring less experienced engineers.\n\n### Key Responsibilities:\n\n- 50% Delivery and Execution - Develops, tests, deploys, and maintains software, with a clear understanding of the value the software is to provide; Takes on new opportunities and tough challenges with a sense of urgency, high energy and enthusiasm; Consistently achieves results, even under tough circumstances; Develops test suites (functional, destructive, etc) to enable success, rapid deployment of code to production; Takes a broad view when approaching issues; using a global lens\n- 20% Learns and Grows - Learns through successful and failed experiment when tackling new problems; Actively seeks ways to grow and be challenged using both formal and informal development channels\n- 20% Plans and Aligns - Collaborates with other team members in agile processes; Creates new and better ways for the organization to be successful; Works the Product Team to ensure user stories are valuable, developer ready, easy to understand and testable; Delivers multi-mode communications that convey a clear understanding of the unique needs of different audiences; Adapts approach and demeanor in real time to match the shifting demands of different situations; Relates openly and comfortably with diverse groups of people\n- 10% Supports and Enables - Helps grow junior engineers by providing guidance on modern software development frameworks, and leading technical discussions\n\n### Direct Manager/Direct Reports:\n\n- This position typically reports to Software Engineer Manager or Sr. Manager\n- This position has 0 Direct Reports\n\n### Travel Requirements:\n\n- No travel required.\n\n### Physical Requirements:\n\n- Most of the time is spent sitting in a comfortable position and there is frequent opportunity to move about. On rare occasions there may be a need to move or lift light articles.\n\n### Working Conditions:\n\n- Located in a comfortable indoor area. Any unpleasant conditions would be infrequent and not objectionable.\n\n### Minimum Qualifications:\n\n- Must be eighteen years of age or older.\n- Must be legally permitted to work in the United States.\n\n### Preferred Qualifications:\n\n- 5+ years of relevant work experience\n- In depth experience building AI workflows\n- Experience with front end technology such as HTML, CSS, and Javascript/Typescript frameworks, an object-oriented programming language (preferably Java), Relational or noSQL database technology, cloud computing techniques, CI/CD tools, modern software design patterns\n- Experience with security frameworks for user and services authorization and authentication\n- Experience with creating and executing unit, functional, destructive and performance tests\n- Experience with modern debugging and root cause analysis techniques\n- Experience with version control system\n\n### Minimum Education:\n\n- The knowledge, skills and abilities typically acquired through the completion of a bachelor's degree program or equivalent degree in a field of study related to the job.\n\n### Preferred Education:\n\n- No additional education\n\n### Minimum Years of Work Experience:\n\n- 3\n\n### Preferred Years of Work Experience:\n\n- No additional years of experience\n\n### Minimum Leadership Experience:\n\n- None\n\n### Preferred Leadership Experience:\n\n- None\n\n### Certifications:\n\n- None\n\n### Competencies:\n\n- Global Perspective\n- Manages Ambiguity\n- Nimble Learning\n- Self-Development\n- Collaborates\n- Cultivates Innovation\n- Situational Adaptability\n- Communicates Effectively\n- Drives Results\n- Interpersonal Savvy\n\n**For California, Colorado, Connecticut, Rhode Island, Nevada, New York City, Ithaca (NY), Westchester County (NY), and Washington residents:**\n\nThe pay range for this position is between $80,000.00 - $180,000.00"
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "moderate",
+    "score": 64,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Deliberate disagreement case. Domain overlap is high and the role is remote with a published band, but it is a senior req with 5+ years preferred against ~2 years. Reference grades the seniority gap down to the top of moderate; the recorded production run scored it strong."
+}

@@ -1,0 +1,74 @@
+{
+  "id": "tailoring-atc-ai-engineer-genai",
+  "kind": "tailoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "638c928b-711f-4819-8201-c828e4093772",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "638c928b-711f-4819-8201-c828e4093772",
+      "title": "AI Engineer (Python, Machine Learning & Generative AI)",
+      "employer": "ATC",
+      "location": "Texas, United States",
+      "isRemote": false,
+      "salary": null,
+      "jobLevel": "associate",
+      "jobDescription": "**Job Title: AI Engineer (Python, Machine Learning \\& Generative AI)** \n\n \n\n Experience developing REST APIs using FastAPI or Flask.\n \n\n We are looking for an AI Engineer with 3+ years of experience in Artificial Intelligence, Machine Learning, and Generative AI. The ideal candidate will have hands-on experience developing AI-powered applications using Python, Large Language Models (LLMs), LangChain, LangGraph, and Retrieval-Augmented Generation (RAG). You will work on designing, building, and deploying scalable AI solutions for enterprise applications.\n \n\n \n\n**Key Responsibilities** \n\n ● Develop and deploy AI and Machine Learning solutions using Python.\n \n\n ● Build LLM-powered applications using LangChain and LangGraph.\n \n\n ● Design and implement Retrieval-Augmented Generation (RAG) pipelines with vector databases.\n \n\n ● Develop AI agents and conversational AI applications.\n \n\n ● Train, evaluate, and optimize machine learning and deep learning models.\n \n\n ● Build REST APIs using FastAPI or Flask to integrate AI services.\n \n\n ● Integrate AI applications with enterprise systems, databases, and third-party APIs.\n \n\n ● Work with structured and unstructured data for model training and inference.\n \n\n ● Deploy AI applications using Docker and cloud platforms such as AWS, Azure, or GCP.\n \n\n ● Collaborate with cross-functional teams to deliver AI-driven business solutions.\n \n\n ● Troubleshoot, optimize, and maintain AI applications in production.\n \n\n \n\n**Required Qualifications** \n\n ● Master’s degree in Computer Science, Artificial Intelligence, Data Science, or a related field.\n \n\n ● 3+ years of experience in AI, Machine Learning, or Software Development.\n \n\n ● Strong programming skills in Python.\n \n\n ● Hands-on experience with TensorFlow, PyTorch, or Scikit-learn.\n \n\n ● Experience building applications with Large Language Models (LLMs).\n \n\n ● Experience with LangChain and LangGraph.\n \n\n ● Hands-on experience implementing Retrieval-Augmented Generation (RAG).\n \n\n ● Experience with vector databases such as Pinecone, ChromaDB, FAISS, or Milvus.\n \n\n ● Knowledge of SQL and NoSQL databases.\n \n\n ● Experience with Git, Docker, and CI/CD pipelines.\n \n\n ● Familiarity with cloud platforms (AWS, Azure, or Google Cloud Platform).\n \n\n \n\n**Preferred Qualifications** \n\n ● Experience with OpenAI, Anthropic, or open-source LLMs.\n \n\n ● Knowledge of prompt engineering, function calling, and AI agent frameworks.\n \n\n ● Familiarity with Hugging Face Transformers and LlamaIndex.\n \n\n ● Experience with Kubernetes and MLOps tools such as MLflow or Kubeflow.\n \n\n ● Exposure to NLP, deep learning, or computer vision."
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "faithful",
+    "score": 100,
+    "tolerance": 25,
+    "requiredKeywords": ["Python", "RAG", "LangChain", "FastAPI", "LangGraph"],
+    "forbiddenFabrications": [
+      "Master's degree",
+      "PhD",
+      "5 years",
+      "10 years",
+      "published researcher"
+    ],
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "The posting requires a Master's and 3+ years. Keyword coverage should be near-total; claiming the degree or the tenure must not be how it gets there."
+}

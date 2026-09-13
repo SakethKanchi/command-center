@@ -1,0 +1,66 @@
+{
+  "id": "scoring-ensono-senior-swe-mainframe",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "198dcd72-e94b-4b83-bdca-02aa658e23d3",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "198dcd72-e94b-4b83-bdca-02aa658e23d3",
+      "title": "Senior Software Engineer - Mainframe",
+      "employer": "Ensono",
+      "location": "Remote - United States",
+      "isRemote": true,
+      "salary": "USD 106,000–130,000/year",
+      "jobLevel": "senior",
+      "jobDescription": "At Ensono, our **Purpose is to be a relentless ally, disrupting the status quo and unleashing our clients to Do Great Things*!*** We enable our clients to achieve key business outcomes that reshape how our world runs. As an expert technology adviser and managed service provider with cross-platform certifications, Ensono empowers our clients to keep up with continuous change and embrace innovation.\n\nWe can **Do Great Things** because we have great Associates. The Ensono Core Values unify our diverse talents and are woven into how we do business. These five traits are the key to achieving our purpose.\n\nHonesty – Reliability – Curiosity – Collaboration - Passion\n\n**About the role and what you'll be doing:**\n\nThis role requires a highly skilled and experienced Senior Mainframe Developer with 8+ Years of specialized technical experience to support, maintain, and enhance a suite of mainframe applications. The ideal candidate will have deep expertise in various skills in mainframe technologies, middleware, databases, and DevOps practices, with a strong understanding of enterprise application support and acts as a technical lead, responsible for maintaining, enhancing, and supporting critical mainframe applications while guiding junior team members\n\n- Design, develop, and maintain Mainframe applications using COBOL, CICS, JCL, DB2, and VSAM.\n- Experience in enterprise-level ticketing systems (ServiceNow, Service Manager, etc.) and their operational workflows.\n- Worked on waterfall and agile methodology projects; capable of handling - Incidents, Service Requests and Change Requests simultaneously.\n- Provide technical troubleshooting and resolution for complex application and integration.\n- Conduct performance tuning and optimization of Mainframe applications and database queries.\n- Develop technical documentation (Knowledge Base articles, SOPs) for business and support teams\n- Understand both functional and technical requirements and provide implementation/change options aligned with business needs.\n\n**We want all new Associates to succeed in their roles at Ensono. That's why we've outlined the job requirements below. To be considered for this role, it's important that you meet all Required Qualifications. If you do not meet all of the Preferred Qualifications, we still encourage you to apply.**\n\n**Required Qualifications**\n\n- Education; Bachelor’s or Master’s degree in Computer Science, Information Technology, or a related field.\n- Experience; Extensive experience in mainframe application development, support and maintenance\n- Technical Skills: Proficiency in mainframe technologies such as COBOL, JCL, CICS, DB2, and VSAM. Strong understanding of software development life cycle (SDLC) methodologies. Experience with version control systems and software development tools.\n- Soft Skills: Excellent problem-solving and analytical skills. Strong communication and interpersonal skills.\n- US Citizen or US Green Card Holder\n\n## Why Ensono?\n\nEnsono is a place to make better happen – for our clients and for your career. You can do great things through innovation or collaboration, by learning or volunteering, or to promote diversity and inclusion. You can do great things for your own health or for a healthier planet. Whatever it means to you to do great things we want Ensono to be the place you can do it.\n\nWe are a client-facing business, but we do encourage clients to allow us to work remotely most of the time so if you are not required to be on a client site, you can choose to work from home or in our Ensono offices.\n\nSome of our benefits include:\n\n- Unlimited Paid Days Off\n- Three health plan options\n- 401k with company match\n- Eligibility for dental, vision, short and long-term disability, life and AD&D coverage, and flexible spending accounts\n- Family Forming Benefit including fertility coverage and adoption/surrogacy reimbursement\n- Paid childbearing and paternal leave\n- Education Reimbursement, Student Loan Assistance or 529 College Funding\n- Sabbatical leave\n- Wellness program\n- Flexible work schedule\n\nAs of the date of this posting, a good faith estimate of the current pay scale for this role is 106,000 to 130,000 to annually based on a full-time schedule. Please note that placement in the range may vary based on numerous factors including but not limited to skills, experience, internal equity, and business needs. In addition to base salary, other compensation programs, depending on eligibility, include an annual bonus plan based on company and individual performance and an equity grant under our Associate Equity Appreciation Program.\n\nEnsono is an Equal Opportunity/Affirmative Action employer. We are committed to providing equal employment to our Associates and building a diverse and inclusive workforce. All qualified applicants will be considered without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, protected veteran status, disability, or other legally protected basis, in accordance with applicable law.\n\nPay transparency nondiscrimination statement/posting OFCCP’s pay transparency policy can be found on OFCCP’s website.\n\nIf you need accommodation at any point during the application or interview process, please let your recruiter know or email USTalentAcquisition@ensono.com."
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "reject",
+    "score": 8,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "8+ years of specialised COBOL/JCL/CICS/DB2 experience. Remote and well-paid, which is exactly the kind of surface signal a scorer must not reward."
+}

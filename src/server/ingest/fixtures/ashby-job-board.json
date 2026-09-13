@@ -1,0 +1,72 @@
+{
+  "apiVersion": "1",
+  "jobs": [
+    {
+      "id": "4b1a7c2e-9f31-4a18-8c44-2b2f0c7d55aa",
+      "title": "Product Engineer",
+      "department": "Engineering",
+      "team": "Product",
+      "employmentType": "FullTime",
+      "location": "San Francisco, CA",
+      "secondaryLocations": [
+        {
+          "location": "Berlin",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "Berlin",
+              "addressLocality": "Berlin",
+              "addressCountry": "Germany"
+            }
+          }
+        }
+      ],
+      "workplaceType": "Remote",
+      "isRemote": true,
+      "isListed": true,
+      "publishedAt": "2026-09-01T16:45:00.000Z",
+      "jobUrl": "https://jobs.ashbyhq.com/meridian/4b1a7c2e-9f31-4a18-8c44-2b2f0c7d55aa",
+      "applyUrl": "https://jobs.ashbyhq.com/meridian/4b1a7c2e-9f31-4a18-8c44-2b2f0c7d55aa/application",
+      "descriptionPlain": "Build the product surface end to end.\n\nYou will work across React and the API layer.",
+      "descriptionHtml": "<p>Build the product surface end to end.</p><p>You will work across React and the API layer.</p>",
+      "compensation": {
+        "compensationTierSummary": "$180K – $220K • Offers Equity",
+        "scrapeableCompensationSalarySummary": "$180K - $220K"
+      },
+      "shouldDisplayCompensationOnJobPostings": true
+    },
+    {
+      "id": "9d2e5f70-1c88-4d02-b6f3-77ad9e1c4411",
+      "title": "Infrastructure Engineer",
+      "department": "Engineering",
+      "team": "Platform",
+      "employmentType": "FullTime",
+      "location": "London, UK",
+      "secondaryLocations": [],
+      "workplaceType": "Hybrid",
+      "isRemote": true,
+      "isListed": true,
+      "publishedAt": "2026-08-18T09:00:00.000Z",
+      "jobUrl": "https://jobs.ashbyhq.com/meridian/9d2e5f70-1c88-4d02-b6f3-77ad9e1c4411",
+      "applyUrl": "https://jobs.ashbyhq.com/meridian/9d2e5f70-1c88-4d02-b6f3-77ad9e1c4411/application",
+      "descriptionPlain": "Run the Kubernetes estate.",
+      "descriptionHtml": "<p>Run the Kubernetes estate.</p>",
+      "shouldDisplayCompensationOnJobPostings": false
+    },
+    {
+      "id": "0000aaaa-bbbb-cccc-dddd-eeeeffff0000",
+      "title": "Draft Role Not Yet Live",
+      "department": "Engineering",
+      "employmentType": "FullTime",
+      "location": "Remote",
+      "secondaryLocations": [],
+      "workplaceType": "Remote",
+      "isRemote": true,
+      "isListed": false,
+      "publishedAt": "2026-09-10T09:00:00.000Z",
+      "jobUrl": "https://jobs.ashbyhq.com/meridian/0000aaaa-bbbb-cccc-dddd-eeeeffff0000",
+      "applyUrl": "https://jobs.ashbyhq.com/meridian/0000aaaa-bbbb-cccc-dddd-eeeeffff0000/application",
+      "descriptionPlain": "Unlisted draft.",
+      "shouldDisplayCompensationOnJobPostings": false
+    }
+  ]
+}

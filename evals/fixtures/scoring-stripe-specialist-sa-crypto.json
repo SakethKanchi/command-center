@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-stripe-specialist-sa-crypto",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 35,
+    "reason": "The candidate significantly lacks the required 7+ years of professional experience and specific technical sales/solutions engineering seniority expected for this specialist role. While the candidate has relevant technical AI and blockchain project experience, they do not meet the minimum experience threshold for this level of position."
+  }
+}

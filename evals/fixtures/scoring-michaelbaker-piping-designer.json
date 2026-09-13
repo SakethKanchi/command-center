@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-michaelbaker-piping-designer",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 3,
+    "reason": "This is a Plumbing Designer role requiring Revit/AutoCAD and MEP experience, which has zero overlap with the candidate's Full Stack AI/React/Node/Python background. Additionally, the role is on-site/hybrid in Houston, TX (not remote), and the candidate is in Jersey City, NJ."
+  }
+}

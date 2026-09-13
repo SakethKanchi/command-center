@@ -1,0 +1,66 @@
+{
+  "id": "scoring-ithaka-senior-cloud-infrastructure",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "ac0ae2d6-a786-4da8-b37a-beaee7b89d46",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "ac0ae2d6-a786-4da8-b37a-beaee7b89d46",
+      "title": "Senior Cloud Infrastructure Engineer",
+      "employer": "ITHAKA",
+      "location": "Remote within the Continental United States",
+      "isRemote": true,
+      "salary": "USD 112,240–140,300/year",
+      "jobLevel": "senior",
+      "jobDescription": "ITHAKA’s mission is to expand access to knowledge and education around the world. Our services — JSTOR, Portico, and Ithaka S+R — enable people everywhere to learn, to grow, and to overcome barriers to education. In carrying out our mission, as employees we feel a deep responsibility to members of our community and to each other, and we are committed to building and sustaining a culture where everyone can thrive.\n\n## **The Role**\n\nITHAKA is seeking a Senior Cloud Infrastructure Engineer to advance how software is built, delivered, and experienced across the product engineering organization. This role reports to the Associate Director, Product Engineering as a member of the Technology Enabling Services team.\n\nAs Senior Cloud Infrastructure Engineer, you will combine cloud infrastructure operations,DevOps practices, and platform engineering principles with a strong emphasis on developer experience, usability, and operational excellence.\n\nYou will design, build, and operate internal- and external-facing infrastructure as well as tools and services that empower engineering teams to deliver high-quality software faster and more safely. This includes hands-on development of cloud infrastructure provisioning and management workflows. Your work will directly influence how developers interact with our platforms and how effectively teams ship and maintain software. This is a highly collaborative role for a senior engineer who enjoys building production systems, mentoring others, shaping engineering practices, and acting as a force multiplier across teams.\n\n## **Responsibilities**\n\n- Building and integrating networking, security, logging, and application orchestration systems that support products serving millions of users globally.\n- Designing identity and access management solutions that promote secure operations with low operational overhead.\n- Working with the Technology Enabling Services team to create safe and reliable self-service offerings for resource provisioning and access requests.\n- Provisioning infrastructure economically and building visibility and tooling for other engineers to do the same with their workload resources.\n- Owning reliability and resiliency outcomes for core infrastructure.\n- Turning recurring support requests into reusable capabilities.\n\n## **Experience and Skills**\n\nWe do not expect any single candidate to have deep expertise across all of these areas. We are looking for engineers who value continuous improvement and who focus on building clear, reliable, and maintainable systems. ITHAKA is committed to onboarding, mentorship, and continuous learning, and you will have support as you grow into new technologies and domains.\n\n### **Core requirements**\n\n- 5 or more years as a platform or infrastructure engineer delivering large-scale systems.\n- Ability to communicate clearly and effectively in writing and verbally, tailoring the level of detail and message to the audience, from technical teams to business leaders and cross-functional stakeholders.\n- Demonstrated product thinking and systems thinking.\n- Ability to self-direct near-term work and partner in developing long-term strategy.\n- Ability to drive the cadence and coordination of regular system upgrades with minimal interruption to consumers.\n- Proven experience building cloud infrastructure in one of the major infrastructure-as-a-service providers, with AWS experience strongly preferred.\n- Proven experience managing configuration and performance of a content delivery/edge network solution such as Fastly, Cloudflare, or Amazon CloudFront.\n- Proven experience using infrastructure-as-code solutions to codify cloud resources, with Terraform experience strongly preferred.\n- Proven experience operating an orchestration platform with containerized applications and ephemeral/scheduled workloads, with experience in Kubernetes a plus.\n- Practical experience with an imperative programming language such as Python or Go.\n- Experience with metric, log, and tracing infrastructure solutions, with experience in OpenTelemetry or Grafana a plus.\n- Familiarity with cloud security solutions like web application firewalls.\n\n### **Preferred experience**\n\n- Practical experience offering a multi-region, multi-account, or multi-cloud delivery environment for failover or performance a plus.\n- Practical expertise contributing to or operating internal developer platforms, enablement tooling, or shared services.\n- Demonstrated proficiency authoring CI/CD pipelines, with GitLab CI/CD experience a plus.\n- Experience developing Terraform modules for consumers to streamline resource provisioning.\n\n## **Compensation & Benefits**\n\nAt ITHAKA we believe in openness and equity. Part of living those values is our commitment to clarity about salary ranges, so candidates know what to expect. The starting salary for the Cloud Infrastructure Engineer position ranges from $112,240 - $140,300. Starting pay may vary with job-related knowledge, skills, and experience. At present, our total compensation package for benefits-eligible employees includes medical, dental, and vision plans, an employer-paid 10% retirement contribution, paid parental and caregiver leave, 22 days of paid time off, 11 paid holidays, up to 12 sick days, wellness benefits, and more. Please note that ITHAKA, at its discretion, may make changes to its benefits programs from time to time.\n\n## Work for ITHAKA\n\nWe are committed to our organizational values of belonging, evidence, speed, teamwork, and trust. We take seriously the need for everyone to feel welcome. Belonging is one of our core values, and it shows in our vibrant culture. People from a wide range of backgrounds work at ITHAKA, and we believe that unique perspectives help us realize new insights and build better solutions.\n\nWe want to work with people who are passionate about ideas like these and who wish to contribute their perspectives and talents to ITHAKA’s mission. We enthusiastically welcome applications from people of all backgrounds and credentials. We want to hear your story and include your perspective in the transformative work we aim to do.\n\nLearn more about Working at ITHAKA.\n\n## Apply Now\n\nAlthough ITHAKA has physical offices in New York and Ann Arbor, Michigan, our employees are distributed across the continental United States. At this time, we’re not considering candidates who are unable to work and reside in the continental U.S.\n\nCandidates may apply by submitting an application online through our career site, if you have any questions about your application, please contact us at careers@ithaka.org. ITHAKA is committed to providing reasonable accommodations, if there’s anything we can do to accommodate any portion of the application or hiring process, please contact us at accommodations@ithaka.org.\n\nWe are proud to be an Equal Opportunity employer. All qualified applicants receive consideration for employment without regard to identity or other status protected by law. We invite you to read our Equal Employment Opportunity Statement. ITHAKA cares about your privacy, learn more about our Applicant Privacy Notice."
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "moderate",
+    "score": 50,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Remote with a published band and an IaC/platform stack the candidate has touched, but it is a senior force-multiplier role expecting 5+ years and mentoring."
+}

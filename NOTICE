@@ -1,0 +1,55 @@
+Command Center
+Copyright (c) 2026 Saketh Kanchi
+
+This product includes code derived from the following third-party project.
+
+
+career-ops
+https://github.com/santifer/career-ops
+Copyright (c) Santiago Fernández de Valderrama
+Licensed under the MIT License.
+
+Portions of the following modules are derived from career-ops and were
+translated from JavaScript to TypeScript for this project:
+
+  src/server/verification/ats-score.ts
+      Derived from career-ops `verify-ats.mjs`: the eight weighted ATS
+      parseability dimensions, their weights, and the pass threshold.
+
+  src/server/verification/fact-gate.ts
+      Derived from career-ops `verify-cv-facts.mjs`: numeric and metric claim
+      extraction, claim normalization, and the forbidden-phrase list.
+
+  evals/
+      The golden-set evaluation design — labelled cases, a zero-cost replay
+      mode, and agreement-against-reference gates — follows career-ops
+      `eval-golden.mjs`.
+
+  src/server/ingest/{greenhouse,ashby,lever}.ts
+      Request shapes, host allowlists and SSRF guards follow the career-ops
+      `providers/` clients.
+
+  src/server/llm/score-job.ts
+      The scoring rubric bands and hard-disqualifier approach follow the
+      career-ops evaluation playbooks in `modes/`.
+
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

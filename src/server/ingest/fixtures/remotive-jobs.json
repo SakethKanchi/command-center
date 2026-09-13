@@ -1,0 +1,58 @@
+{
+  "0-legal-notice": "Legal warning - Hey, thanks for using Remotive's API, we appreciate it! Please link back to the URL found on Remotive AND mention Remotive as a source.",
+  "job-count": 4,
+  "total-job-count": 4,
+  "jobs": [
+    {
+      "id": 1680495,
+      "url": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
+      "title": "Remote Office Assistant",
+      "company_name": "Coalition Technologies ",
+      "category": "Marketing",
+      "tags": ["excel", "wordpress"],
+      "job_type": "full_time",
+      "publication_date": "2026-09-11T20:16:48",
+      "candidate_required_location": "Worldwide",
+      "salary": "$31,2k- $52k",
+      "description": "<p class=\"h3\">Coalition Technologies is seeking a reliable, detail-oriented, and highly organized Remote Office Assistant to support administrative, bookkeeping, billing, and data entry tasks.</p>"
+    },
+    {
+      "id": 2091097,
+      "url": "https://remotive.com/remote-jobs/software-development/senior-data-engineer-2091097",
+      "title": "Senior Data Engineer",
+      "company_name": "Lemon.io",
+      "category": "Software Development",
+      "tags": ["AWS", "python"],
+      "job_type": "full_time",
+      "publication_date": "2026-08-19T12:12:11",
+      "candidate_required_location": "LATAM, Europe, USA, Canada, APAC",
+      "salary": "",
+      "description": "<p>Are you a talented Senior Data Engineer looking for a remote job that lets you show your skills and get decent compensation? Look no further than <a href=\"https://lemon.io/for-developers/\" rel=\"nofollow\">Lemon.io</a>.</p>"
+    },
+    {
+      "id": 2091105,
+      "url": "https://remotive.com/remote-jobs/all-others/content-reviewer-english-us-2091105",
+      "title": "Content Reviewer - English US",
+      "company_name": "TELUS Digital",
+      "category": "All others",
+      "tags": ["social media", "AI/ML"],
+      "job_type": "part_time",
+      "publication_date": "2026-08-21T05:54:39",
+      "candidate_required_location": "USA",
+      "salary": "$14/hour",
+      "description": "<p>Our global AI Community is a vibrant network of more than one million contributors who help customers collect, enhance, train, translate, and localize content.</p>"
+    },
+    {
+      "id": 2091188,
+      "title": "Senior Backend Engineer",
+      "company_name": "Nowhere Labs",
+      "category": "Software Development",
+      "tags": ["go", "postgres"],
+      "job_type": "full_time",
+      "publication_date": "2026-08-14T20:33:39",
+      "candidate_required_location": "Worldwide",
+      "salary": "$170k - $200k",
+      "description": "<p>A posting with no url field: unusable downstream, so the adapter drops it.</p>"
+    }
+  ]
+}

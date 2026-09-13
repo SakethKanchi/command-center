@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-ensono-senior-swe-mainframe",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 10,
+    "reason": "The candidate is a modern AI/Full Stack engineer and does not possess the 8+ years of mainframe experience (COBOL, JCL, CICS, DB2) required for this role."
+  }
+}

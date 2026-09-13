@@ -1,0 +1,66 @@
+{
+  "id": "scoring-beaconfire-jr-ai-engineer",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "c0502ca1-e71d-405a-ab90-df9028252549",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "c0502ca1-e71d-405a-ab90-df9028252549",
+      "title": "JR. AI Engineer",
+      "employer": "BeaconFire Inc.",
+      "location": "New York, United States",
+      "isRemote": false,
+      "salary": null,
+      "jobLevel": "entry level",
+      "jobDescription": "**Job Responsibilities:** \n\n ● Collaborate with the team to design and develop high quality Web applications using Python, Flask, Django, and related technologies.\n \n\n ● Write clean and efficient code, and ensure code maintainability and reusability.\n \n\n ● Design and implement RAG pipelines on Google Cloud / Vertex AI (chunking, embeddings, indexing, retrieval, reranking, grounding).\n \n\n ● Build agentic workflows (tool use, planning, reflection/guardrails, structured outputs) using Python-first frameworks.\n \n\n ● Perform code reviews to ensure code quality and consistency.\n \n\n ● Conduct testing to ensure application quality and reliability.\n \n\n ● Create and maintain technical documentation for web applications.\n \n\n ● Participate in project planning, estimation, and prioritization.\n \n\n ● Stay up to date with the latest technologies for Python development.\n \n\n ● Define and run evaluation (retrieval metrics, answer quality, hallucination/grounding checks), and improve system quality iteratively.\n \n\n ● Ship to production: APIs, monitoring/observability, cost/performance optimization, CI/CD, and security best practices.\n \n\n \n\n**Requirement:** \n\n ● Experience in software development in Python3.\n \n\n ● Decent understanding of the software development/testing life cycle.\n \n\n ● Knowledge of relational databases (e.g. MySQL, PostgreSQL, etc)slanguage skills\n \n\n ● Experience with version control tools, such as Git.\n \n\n ● Experience building RAG solutions (hybrid search, reranking, chunking strategies, embeddings, prompt + schema design).\n \n\n ● Familiar with at least one agentic framework (e.g., LangGraph/LangChain, LlamaIndex, Semantic Kernel, AutoGen) and tool/function calling patterns.\n \n\n \n\n**Preferred Qualifications:** \n\n ● 1+ year professional experience in Python web application development with either Flask or Django.\n \n\n ● Experience in RESTful API development in Python.\n \n\n ● Understanding of Python web application frameworks such as Flask or Django.\n \n\n ● Experience with Cloud services, such as AWS.\n \n\n ● Experience with Vertex AI and GCP fundamentals (IAM, logging/monitoring, Cloud Run/GKE, storage).\n \n\n ● Knowledge graphs for RAG (entity linking, graph traversal + retrieval fusion).\n \n\n ● Streaming/messaging (Pub/Sub, Kafka), document pipelines (Document AI), and multilingual retrieval.\n \n\n ● Experience with evaluation tooling (RAGAS, TruLens, custom eval harnesses), prompt/version management.\n \n\n ● Frontend integration (basic React/Next.js) or platform enablement (internal developer tooling)."
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "strong",
+    "score": 80,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Entry-level Python/Flask posting that names RAG (hybrid search, reranking, chunking, embeddings) as a core duty and sits in commuting range. The candidate's strongest lane; graded high on skill overlap with only a no-stated-remote caveat."
+}

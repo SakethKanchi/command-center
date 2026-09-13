@@ -1,0 +1,19 @@
+services:
+  command-center:
+    build: .
+    image: command-center:latest
+    ports:
+      - "8787:8787"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PORT: 8787
+      DATABASE_PATH: /data/command-center.db
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:8787}
+    volumes:
+      - command-center-data:/data
+    restart: unless-stopped
+
+volumes:
+  command-center-data:

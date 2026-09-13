@@ -1,0 +1,53 @@
+{
+  "jobs": [
+    {
+      "id": 4009231007,
+      "internal_job_id": 4123456,
+      "title": "Senior Backend Engineer",
+      "updated_at": "2026-08-30T11:04:12-04:00",
+      "first_published": "2026-08-21T14:12:03-04:00",
+      "requisition_id": "R-1422",
+      "absolute_url": "https://job-boards.greenhouse.io/northwindlabs/jobs/4009231007",
+      "company_name": "Northwind Labs",
+      "location": { "name": "Remote - United States" },
+      "metadata": [],
+      "departments": [
+        {
+          "id": 4001,
+          "name": "Engineering",
+          "child_ids": [],
+          "parent_id": null
+        }
+      ],
+      "offices": [{ "id": 4002, "name": "Remote", "location": null }],
+      "content": "&lt;p&gt;We&#39;re hiring a &lt;strong&gt;Senior Backend Engineer&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;You will own latency &amp;amp; reliability for our ingestion tier.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;6+ years of Go or TypeScript&lt;/li&gt;&lt;li&gt;Postgres at scale&lt;/li&gt;&lt;/ul&gt;"
+    },
+    {
+      "id": 4009231088,
+      "internal_job_id": 4123499,
+      "title": "Staff Data Engineer",
+      "updated_at": "2026-09-02T09:31:44-04:00",
+      "requisition_id": "R-1440",
+      "absolute_url": "https://job-boards.greenhouse.io/northwindlabs/jobs/4009231088",
+      "location": { "name": "New York, NY" },
+      "metadata": [],
+      "departments": [
+        { "id": 4003, "name": "Data", "child_ids": [], "parent_id": null }
+      ],
+      "offices": [
+        { "id": 4004, "name": "New York", "location": "New York, NY" }
+      ],
+      "content": "&lt;p&gt;Own the warehouse.&lt;/p&gt;"
+    },
+    {
+      "id": 4009231099,
+      "internal_job_id": 4123512,
+      "title": "Ghost Requisition",
+      "updated_at": "2026-09-03T09:31:44-04:00",
+      "location": { "name": "Austin, TX" },
+      "metadata": [],
+      "content": "&lt;p&gt;No public link on this one.&lt;/p&gt;"
+    }
+  ],
+  "meta": { "total": 3 }
+}

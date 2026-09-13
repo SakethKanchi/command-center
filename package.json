@@ -1,0 +1,65 @@
+{
+  "name": "command-center",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An AI agent that carries a job posting from discovery to a tracked application across Gmail, Google Sheets and Notion.",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "dev": "concurrently -n server,web -c cyan,magenta \"npm run dev:server\" \"npm run dev:web\"",
+    "dev:server": "tsx watch src/server/main.ts",
+    "dev:web": "vite",
+    "start": "tsx src/server/main.ts",
+    "build": "vite build",
+    "migrate": "tsx src/server/db/migrate.ts",
+    "backfill:experience": "tsx scripts/backfill-experience.ts",
+    "seed": "tsx scripts/seed.ts",
+    "connect": "node scripts/connect.mjs",
+    "eval": "tsx evals/run.ts --replay",
+    "eval:json": "tsx evals/run.ts --replay --json",
+    "eval:live": "tsx evals/run.ts --live",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "verify": "npm run typecheck && npm run test && npm run eval"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "fflate": "0.8.3",
+    "hono": "^4.6.14",
+    "react-router-dom": "7.18.3",
+    "unpdf": "1.8.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.12",
+    "@tailwindcss/vite": "^4.1.18",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "jsdom": "^25.0.1",
+    "lucide-react": "^0.469.0",
+    "pdfjs-dist": "^4.9.155",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "esbuild@0.21.5": true,
+    "esbuild@0.25.12": true,
+    "@biomejs/biome@2.3.12": true
+  }
+}

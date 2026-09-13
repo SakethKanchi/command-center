@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-microsoft-software-engineer-ii",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 62,
+    "reason": "Strong skills match on Python, React, AI/RAG, and cloud, with experience level (2+ years) aligned; however, the role is onsite in Redmond, WA which conflicts with the candidate's New Jersey location, and the job requests C/C++/Java which are not in the candidate's stack."
+  }
+}

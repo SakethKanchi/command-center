@@ -1,0 +1,66 @@
+{
+  "id": "scoring-ust-agentic-ai-multi-agent",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "d90d1254-d1fc-466f-8f89-ed1b087daad0",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "d90d1254-d1fc-466f-8f89-ed1b087daad0",
+      "title": "Agentic AI / Multi-Agent Systems Engineer",
+      "employer": "UST",
+      "location": "Oregon, United States",
+      "isRemote": false,
+      "salary": null,
+      "jobLevel": "mid-senior level",
+      "jobDescription": "**Role Description**\n**Agentic AI / Multi-Agent Systems Engineer**\n**ML Engineer I**\n**Who We Are**\n Born digital, UST transforms lives through the power of technology. We walk alongside our clients and partners, embedding innovation and agility into everything they do. We help them create transformative experiences and human-centered solutions for a better world.\n \n\n \n\n UST is a mission-driven group of 29,000+ practical problem solvers and creative thinkers in more than 30 countries. Our entrepreneurial teams are empowered to innovate, act nimbly, and create a lasting and sustainable impact for our clients, their customers, and the communities in which we live.\n \n\n \n\n With us, you’ll create a boundless impact that transforms your career—and the lives of people across the world.\n \n\n \n\n Visit us at UST.com.\n \n\n \n\n**You Are**\n UST is searching for an Agentic AI / Multi-Agent Systems Engineer who will develop and optimize multi-agent AI systems and agentic workloads.\n \n\n \n\n**The Opportunity**\n* Work with agent frameworks and orchestration technologies to design scalable solutions\n* Select, evaluate, and deploy appropriate models and inference engines based on workload requirements\n* Debug and optimize performance across the full stack: agent → model → inference engine → hardware\n* Benchmark and profile AI workloads to identify and resolve performance bottlenecks\n* Optimize model execution for latency, throughput, memory efficiency and accelerator utilization\n* Collaborate on the complete execution path from agent logic through GPU hardware\n\n This position description identifies the responsibilities and tasks typically associated with the performance of the position. Other relevant essential functions may be required.\n \n\n \n\n**What You Need**\n* Bachelor's degree in Electrical Engineering or Computer Engineering\n* 2-4 years of platform debug experience with BIOS/FW/platform ingredients\n* Required Experience \\& Knowledge\n* Linux \\& Systems\n* Strong Linux development and debugging skills\n* Understanding of processes, threads, memory, PCIe, DMA, kernel modules, and device drivers\n* Ability to debug workloads across the application → runtime → driver stack\n* Agentic AI \\& Multi-Agent Systems\n* Hands-on development of multi-agent workloads\n* Experience with agent orchestration, tool/function calling, memory planning and agent-to-agent communication\n* Experience with agent frameworks such as LangGraph/LangChain, AutoGen, or CrewAI\n* Models \\& Inference\n* Strong understanding of LLMs, SLMs and multimodal models\n* Knowledge of Transformer architecture, attention, tokenization, context windows, and KV cache\n* Hands-on experience with model selection, evaluation, and deployment\n* Understanding of model formats and optimization: ONNX, Open VINO IR, safe tensors, quantization (FP16/BF16/INT8/INT4)\n* Experience with inference engines: Open VINO, ONNX Runtime, vLLM, llama.cpp, or TGI\n* Understanding of prefill vs. decode, batching, continuous batching, speculative decoding, and KV-cache management\n* Ability to optimize for latency, throughput, tokens/sec, memory footprint, and accelerator utilization\n* Accelerator \\& Compute Stack\n* Understanding of the complete execution path: Agent → Model → Inference Engine → Middleware → Compute Runtime → GPU Driver → Hardware\n* Understanding of GPU memory, kernel execution, synchronization, device selection and host/device data movement\n* Familiarity with middleware/accelerator compute runtimes: OMZ/OneAPI/SYCL, Level Zero, or OpenCL\n* Programming \\& Development\n* Strong Python skills\n* Working knowledge of C/C++\n* Git/GitHub and Linux shell proficiency\n* Debugging tools expertise\n* Practical use of GitHub Copilot for development, debugging and code generation\n* Docker/container fundamentals\n* Performance Engineering\n* Ability to benchmark and profile AI workloads\n* Understanding of latency, throughput, tokens/sec, GPU utilization, memory bandwidth and CPU/GPU bottlenecks\n* Ability to identify performance issues at different stack levels\n* Desired Skills\n* Intel GPU architecture and Linux GPU driver stack\n* DRM/i915 and newer Intel GPU driver architecture\n* Intel GPU profiling and telemetry\n* Speculative decoding and continuous batching experience\n* Tensor/pipeline parallelism knowledge\n* Model conversion, graph optimization and operator/kernel fusion\n* MCP (Model Context Protocol)\n* Advanced RAG architectures\n* Agent observability/tracing\n* Model routing and dynamic model selection\n* Distributed/multi-agent execution\n* CUDA/HIP/ROCm familiarity\n* Kubernetes, Ray or Slurm experience\n* Distributed inference knowledge\n* Linux kernel/GPU debugging\n* perf, gdb, tracing and GPU profiling tools\n\n Compensation can differ depending on factors including but not limited to the specific office location, role, skill set, education, and level of experience. UST provides a reasonable range of compensation for roles that may be hired in various U.S. markets as set forth below.\n \n\n \n\n**Role Location: Oregon**\n**Compensation Range** \n**:** \n $72,000-$108,000\n \n\n \n\n**Benefits**\n Full-time, regular employees accrue a minimum of 10 days of paid vacation per year, receive 6 days of paid sick leave each year (pro-rated for new hires throughout the year), 10 paid holidays, and are eligible for paid bereavement leave and jury duty. They are eligible to participate in the Company’s 401(k) Retirement Plan with employer matching. They and their dependents residing in the US are eligible for medical, dental, and vision insurance, as well as the following Company-paid Employee Only benefits: basic life insurance, accidental death and disability insurance, and short- and long-term disability benefits. Regular employees may purchase additional voluntary short-term disability benefits, and participate in a Health Savings Account (HSA) as well as a Flexible Spending Account (FSA) for healthcare, dependent child care, and/or commuting expenses as allowable under IRS guidelines. Benefits offerings vary in Puerto Rico.\n \n\n \n\n Part-time employees receive 6 days of paid sick leave each year (pro-rated for new hires throughout the year) and are eligible to participate in the Company’s 401(k) Retirement Plan with employer matching.\n \n\n \n\n Full-time temporary employees receive 6 days of paid sick leave each year (pro-rated for new hires throughout the year) and are eligible to participate in the Company’s 401(k) program with employer matching. They and their dependents residing in the US are eligible for medical, dental, and vision insurance.\n \n\n \n\n Part-time temporary employees receive 6 days of paid sick leave each year (pro-rated for new hires throughout the year).\n \n\n \n\n All US employees who work in a state or locality with more generous paid sick leave benefits than specified here will receive the benefit of those sick leave laws.\n \n\n \n\n**What We Believe**\n We proudly embrace the values that have shaped UST since day one. We build our culture of Humility, Humanity, and Integrity. These values inspire us to nurture a people-first, human centric culture that fosters diversity, prioritizes sustainable solutions, and keeps our people and clients at the forefront of all decisions.\n \n\n \n\n**Humility**\n We will listen, learn, be empathetic and help selflessly in our interactions with everyone.\n \n\n \n\n**Humanity**\n Through business, we will better the lives of those less fortunate than ourselves.\n \n\n \n\n**Integrity**\n We honor our commitments and act with responsibility in all our relationships.\n \n\n \n\n**Equal Employment Opportunity Statement**\n UST is an Equal Opportunity Employer.\n \n\n \n\n All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, sexual orientation, gender identity, national origin, disability, status as a protected veteran, or any other applicable characteristics protected by law. We will consider qualified applicants with arrest or conviction records in accordance with state and local laws and “fair chance” ordinances.\n \n\n \n\n UST reserves the right to periodically redefine your roles and responsibilities based on the requirements of the organization and/or your performance.\n \n\n \n\n #UST\n \n\n \n\n**Skills**\n Agentic AI, Linux Kernel, OpenVINO, LangChain, RAG, Kubernetes"
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "reject",
+    "score": 18,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Keyword-trap case: the title reads like the candidate's specialty, but the requirements are GPU/inference-engine internals (CUDA, OpenVINO, PCIe, firmware, kernel debugging). Graded just inside reject, close to the weak boundary at 20."
+}

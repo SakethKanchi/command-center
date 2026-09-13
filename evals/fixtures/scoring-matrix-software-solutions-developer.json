@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-matrix-software-solutions-developer",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 48,
+    "reason": "Candidate has a strong skill match in React/TypeScript/Python and 2+ years of experience, but the job requires 3 years minimum, demands C#/.NET as primary stack, Microsoft Power Platform expertise, SQL Server, and a federal/defense clearance — none of which align with the candidate's background. Remote work is supported."
+  }
+}

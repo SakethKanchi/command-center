@@ -1,0 +1,45 @@
+{
+  "page": 0,
+  "page_count": 1,
+  "items_per_page": 20,
+  "total": 3,
+  "results": [
+    {
+      "id": 22049518,
+      "name": "Senior Backend Engineer, Growth (US)",
+      "contents": "<p><span>Nanit is moving families beyond overwhelm by transforming how parents understand their baby's early years.</span></p><p>You will own the growth backend: Node services, Postgres and the experimentation platform.</p>",
+      "publication_date": "2026-08-17T18:29:15Z",
+      "locations": [{ "name": "New York, NY" }],
+      "refs": {
+        "landing_page": "https://www.themuse.com/jobs/nanit/senior-backend-engineer-growth-us"
+      },
+      "company": { "name": "Nanit" }
+    },
+    {
+      "id": 22153984,
+      "name": "Software Engineer III - Equities Structured Products Technology",
+      "contents": "<p><b>Job Description:</b><br>At Bank of America, we are guided by a common purpose to help make financial lives better through the power of every connection.</p>",
+      "publication_date": "2026-09-12T20:26:15Z",
+      "locations": [{ "name": "New York, NY" }],
+      "refs": {},
+      "company": { "name": "Bank of America" }
+    },
+    {
+      "id": 22094615,
+      "name": "Manager, Starlink Enterprise Sales",
+      "contents": "<p>SpaceX was founded under the belief that a future where humanity is out exploring the stars is fundamentally more exciting than one where we are not.</p><p>As a Starlink enterprise sales manager you will own aviation and maritime accounts end to end.</p>",
+      "publication_date": "2026-09-02T19:45:52Z",
+      "locations": [
+        { "name": "El Segundo, CA" },
+        { "name": "Flexible / Remote" },
+        { "name": "Lockhart, TX" },
+        { "name": "New York, NY" },
+        { "name": "Redmond, WA" }
+      ],
+      "refs": {
+        "landing_page": "https://www.themuse.com/jobs/spacex/manager-starlink-enterprise-sales-9a40ed"
+      },
+      "company": { "name": "SpaceX" }
+    }
+  ]
+}

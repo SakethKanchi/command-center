@@ -1,0 +1,66 @@
+{
+  "id": "scoring-michaelbaker-piping-designer",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "e60cb4f8-1268-445c-bfdb-56c4a57644eb",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "e60cb4f8-1268-445c-bfdb-56c4a57644eb",
+      "title": "Piping Designer",
+      "employer": "Michael Baker International",
+      "location": "Houston, TX, United States",
+      "isRemote": false,
+      "salary": null,
+      "jobLevel": "intern",
+      "jobDescription": "Plumbing Designer \nDesign Associate I\n\nWhat We're Looking For:\n\nMichael Baker International is seeking a Plumbing Designer - Design Associate I to support MEP projects with a primary focus on plumbing design and Revit-based production. Working under close supervision and in collaboration with senior designers and engineers, this role will help prepare coordinated design and construction documents for new construction and renovation projects. The ideal candidate brings foundational knowledge of building systems, strong attention to detail, and an interest in developing practical, code-compliant plumbing solutions.\n\nA hybrid working arrangement is available for this position.\n\nWhat You'll Do :\n\n• Support the design and documentation of plumbing systems for building projects, including domestic water, sanitary waste and vent, storm drainage, and related systems under the guidance of senior staff. \n• Develop and revise Revit models, plans, details, schedules, and construction documents for MEP and plumbing design deliverables. \n• disciplines to identify and resolve design conflicts. \n• Assist with design calculations, equipment and fixture selections, specifications, reports, and other technical documentation. \n• Research applicable plumbing codes, building standards, and industry practices to support project compliance. \n• Prepare schematic and design development documents, final contract documents, and record drawings. \n• Assist with construction administration activities, including submittal reviews, responses to requests for information, and addendum preparation. \n• Participate in internal quality reviews and incorporate comments accurately and promptly. \n• Collaborate with project teams to meet scope, schedule, budget, and quality expectations. \n• Perform additional duties as assigned to support project delivery and team needs.\n\nWhat You Need to Succeed:\n\nMinimum Qualifications \n• Bachelor's degree in engineering, architecture, engineering technology, drafting/design, or a related field \n• 3-5 years of related design, drafting, or building systems experience. \n• Coursework, internship experience, or professional experience supporting MEP or plumbing design. \n• Working knowledge of Revit, with the ability to create and modify models and construction documents. \n• Ability to read and interpret architectural and engineering drawings. \n• Strong organizational, communication, and problem-solving skills, with careful attention to detail. \n• Ability to work effectively in a collaborative, multidisciplinary team environment. \nPreferred Qualifications \n• Experience producing plumbing design documents in Revit for commercial, institutional, healthcare, or other building projects. \n• Familiarity with BIM coordination and clash-resolution workflows. \n• Basic knowledge of plumbing codes, fixture requirements, piping systems, and construction documentation standards. \n• Experience with AutoCAD and Microsoft Office applications.\n\nCompensation:\n\nThe approximate compensation range for this position is $63,701-$80,263 per year. This compensation range is a good faith estimate for the position at the time of posting. Actual compensation is dependent upon factors such as education, qualifications, experience, skillset, and physical work location.\n\nWhy Choose Us \n• Medical, dental, and vision insurance \n• 401(k) Retirement Plan \n• Health Savings Account (HSA) \n• Flexible Spending Account (FSA) \n• Life, AD&D, short-term, and long-term disability coverage \n• Professional and personal development \n• Generous paid time off \n• Commuter and wellness benefits"
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "reject",
+    "score": 5,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Plumbing/MEP design in Revit and AutoCAD, onsite Houston, 3-5 years of drafting. Second floor case, from a different industry than the sales one."
+}

@@ -1,0 +1,22 @@
+node_modules/
+dist/
+
+# Local database, rendered PDFs, and anything else runtime-generated.
+# The database holds connector credentials and an LLM key — never commit it.
+data/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Test and tool scratch
+coverage/
+*.tsbuildinfo
+.vitest-cache/

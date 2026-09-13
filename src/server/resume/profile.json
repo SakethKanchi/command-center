@@ -1,0 +1,156 @@
+{
+  "name": "Saketh Reddy Kanchi",
+  "email": "sakethkanchi3@gmail.com",
+  "phone": null,
+  "location": "Plainsboro, NJ",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/SakethKanchi"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/saketh-kanchi/"
+    },
+    {
+      "label": "Portfolio",
+      "url": "https://sakethkanchi.vercel.app/"
+    }
+  ],
+  "headline": "Full Stack AI Engineer building production features in React, Node, and Python",
+  "summary": "Full Stack AI Engineer with 2+ years of experience. I take features from an idea through production and own them the whole way, mostly in React, Node, and Python. A lot of what I build is AI, including production RAG and the evals around it.",
+  "experience": [
+    {
+      "company": "Fund Flow OS",
+      "title": "Full Stack AI Engineer",
+      "start": "Dec 2025",
+      "end": null,
+      "location": "Jersey City, NJ",
+      "bullets": [
+        "Shipped production RAG with pgvector/BM25 hybrid retrieval, reranking, multi-provider LLM routing, and nightly evaluation in CI.",
+        "Built customer-facing React/Node.js features and Apollo.io enrichment for 500+ lead records.",
+        "Cut hosting costs by approximately 80% by moving long-running workloads from Vercel to Fly.io."
+      ]
+    },
+    {
+      "company": "SideQuest",
+      "title": "Software Engineer, Automation",
+      "start": "Jun 2025",
+      "end": "Dec 2025",
+      "location": "Jersey City, NJ",
+      "bullets": [
+        "Led automation for a small team: AI content pipelines in Python with Apps Script, Foursquare, and Gemini, replacing recurring manual data entry.",
+        "Automated Mapbox tileset generation from PostgreSQL/GeoJSON for dynamic location-based quest maps."
+      ]
+    },
+    {
+      "company": "Montalvo Technologies",
+      "title": "Software Engineer",
+      "start": "Jul 2023",
+      "end": "Mar 2024",
+      "location": "Hyderabad, India",
+      "bullets": [
+        "Built full-stack MERN apps with React, Node.js/Express, and MongoDB persistence.",
+        "Implemented authentication, CRUD workflows, and API error handling across frontend and backend."
+      ]
+    },
+    {
+      "company": "TechBulls",
+      "title": "Web Development Intern",
+      "start": "Jan 2022",
+      "end": "Jul 2022",
+      "location": "Hyderabad, India",
+      "bullets": [
+        "Integrated a Python stock-price feed and validated incoming market data for a financial visualization app.",
+        "Built an interactive React/TypeScript Perspective UI and added tests for data-processing logic."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "ai-quota-tracker",
+      "description": "Python, SQLite, OAuth/OIDC, AI provider APIs",
+      "url": null,
+      "bullets": [
+        "Published the ai-quota-tracker CLI on PyPI to unify quota and cost data across five AI providers; fixed a silent cost bug and cut refresh time from 18.2s to 3.0s.",
+        "Implemented per-provider OAuth/OIDC token rotation, HTTP 429 backoff, and cached/live fallbacks for rate-limited accounts."
+      ]
+    },
+    {
+      "name": "Parley",
+      "description": "Node.js, Python, Discord, SQLite, FastAPI",
+      "url": null,
+      "bullets": [
+        "Built a local-first Discord voice assistant with local transcription, pluggable LLM backends, and separated voice, transcription, and response processes.",
+        "Designed per-speaker capture and a Node.js pipeline with SQLite + FTS5 for searchable multi-channel recording."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "AI & Retrieval",
+      "keywords": [
+        "RAG",
+        "pgvector",
+        "BM25",
+        "reranking",
+        "LiteLLM",
+        "Hugging Face",
+        "LangChain",
+        "Gemini",
+        "OpenAI",
+        "Claude"
+      ]
+    },
+    {
+      "name": "Languages & Web",
+      "keywords": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI"
+      ]
+    },
+    {
+      "name": "Data & APIs",
+      "keywords": [
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Pinecone",
+        "REST APIs",
+        "GraphQL",
+        "OAuth/OIDC"
+      ]
+    },
+    {
+      "name": "Cloud & Quality",
+      "keywords": [
+        "Fly.io",
+        "Vercel",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "Pytest",
+        "Playwright"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "Stevens Institute of Technology",
+      "degree": "M.S. Computer Science, GPA 3.83/4.0",
+      "start": "2024",
+      "end": "Dec 2025"
+    },
+    {
+      "school": "Gandhi Institute of Technology and Management (GITAM)",
+      "degree": "B.S. Computer Science, GPA 8.29/10.0",
+      "start": "2019",
+      "end": "Jun 2023"
+    }
+  ]
+}

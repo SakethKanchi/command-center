@@ -1,0 +1,73 @@
+{
+  "id": "tailoring-harris-associate-ai-assisted-developer",
+  "kind": "tailoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "f494ff06-e5e7-4362-881b-b0aaa653aa85",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "f494ff06-e5e7-4362-881b-b0aaa653aa85",
+      "title": "Associate AI Assisted Software Developer",
+      "employer": "Harris Computer",
+      "location": "Idaho, United States",
+      "isRemote": false,
+      "salary": null,
+      "jobLevel": "entry level",
+      "jobDescription": "The purpose of this role is to understand requirements, business cases, user stories, and acceptance criteria, and to apply software engineering judgment, computer science fundamentals, and AI-assisted development practices to design, develop, test, enhance, and maintain software applications.\n \n\n \n\n This role will actively use approved AI development tools to accelerate coding, testing, troubleshooting, documentation, refactoring, and code review, while retaining human accountability for quality, security, maintainability, and production readiness. This position will help establish repeatable, responsible AI-assisted development practices that improve engineering capacity, consistency, and delivery speed.\n \n\n \n\n**Duties \\& Responsibilities**\n* Partners with Business Analysts, Product Owners, senior developers, and internal/external stakeholders to understand requirements, business cases, user stories, acceptance criteria, and customer impact\n* Uses approved AI-assisted development tools to accelerate software analysis, coding, debugging, refactoring, documentation, and testing, while maintaining human accountability for all final work products\n* Produces and executes unit test cases, including AI-assisted test generation where appropriate, to validate functionality against acceptance criteria and expected system behavior\n* Maintains established coding standards, secure development practices, architectural patterns, and AI SDLC governance requirements\n* Reviews, validates, and refines AI-generated outputs to ensure code quality, accuracy, maintainability, security, performance, and alignment with product standards\n* Produces supporting technical, installation, configuration, and troubleshooting documentation for internal and external publication as appropriate, leveraging AI tools to improve speed and consistency\n* Achieves productivity and quality targets by using AI-assisted workflows responsibly to improve development velocity, reduce rework, and deliver within budget, schedule, and defined quality standards\n* Completes assigned software and non-software deliverables within timelines defined by the Scrum Team, Project Manager, Product Owner, or technical leadership\n* Produces technical specifications, code, unit test plans, documentation, and related development artifacts in alignment with functional specifications, traceability requirements, and team standards\n* Delivers committed development, testing, and documentation artifacts with appropriate guidance from senior developers, architects, and managers, while demonstrating increasing independence over time\n* Provides input and assistance in preparing technical design specifications, including identifying opportunities where AI-assisted approaches can improve development efficiency, test coverage, documentation quality, or maintainability\n* Participates in planning, grooming, walkthroughs, estimation, retrospectives, and other agile processes, contributing informed technical input and AI-assisted analysis where appropriate\n* Ensures all work artifacts, including AI-assisted code, documentation, tests, and technical recommendations, are thoroughly reviewed by peers, senior developers, or architects for quality, security, performance, and production readiness\n* Contributes to continuous improvement of the organization’s Level 3 AI SDLC practices by sharing effective prompts, workflows, lessons learned, reusable patterns, and responsible AI development techniques\n* Supports knowledge transfer, product continuity, and modernization efforts by learning existing systems, documenting legacy behavior, and helping apply AI-assisted practices to both new development and existing codebases\n\n**Salary range: $65,000 - $75,000 USD per year.**"
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "faithful",
+    "score": 100,
+    "tolerance": 25,
+    "requiredKeywords": ["AI", "testing", "production", "security"],
+    "forbiddenFabrications": [
+      "PhD",
+      "10 years",
+      "security clearance",
+      "Idaho resident"
+    ],
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Process-heavy posting about AI-assisted SDLC practice rather than a named stack, so the required terms are the practice terms."
+}

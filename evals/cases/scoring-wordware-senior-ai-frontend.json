@@ -1,0 +1,66 @@
+{
+  "id": "scoring-wordware-senior-ai-frontend",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "1993d72e-3e7c-4c3d-9833-706f630d4f7e",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "1993d72e-3e7c-4c3d-9833-706f630d4f7e",
+      "title": "Senior AI Frontend Engineer",
+      "employer": "Wordware",
+      "location": "US",
+      "isRemote": false,
+      "salary": "USD 180,000–240,000/year",
+      "jobLevel": "senior",
+      "jobDescription": "# ⚠️ **Please read first**\n\n- This is a **full-time, in-person role** based in **San Francisco (Presidio)** - we work from the office **5 days a week**.\n- You must be **based in the Bay Area** or willing to **relocate before starting**.\n- We require **US work authorization** , but are open to **O-1 or J-1 visa sponsorship** for exceptional candidates.\n\n## **About Sauna by Wordware**\n\nEvery tool you use was built as an island, so you became the glue between them: a name from Gmail into the CRM, a time from the CRM into Calendly, a note from Calendly into a doc. AI showed up and mostly became an eleventh window to paste into.\n\nSauna is a hybrid of AI and software standing on one shared brain. It holds your context and hands you real software built on top of it, so an ordinary Calendly becomes one that writes the invite itself and knows which of your busy hours bend, and for whom. Software for the path you repeat, AI for the edge that never repeats.\n\nWordware is the team behind it, 15 people backed by Spark Capital, Felicis, and Y Combinator with a $30M seed, the largest in YC's history. We build from an office in the Presidio, fifty metres from Crissy Field beach, and we work absurdly hard because we can see and feel the outcome every day.\n\n## **About the Role:**\n\nYou'll own the frontend of Sauna: shipping interfaces that feel instant, intuitive, and polished even when the underlying work is complex.\n\n**What You'll Do:**\n\nYou'll need to make product and design calls yourself, prototype quickly, and execute without waiting for perfect specs. Sometimes you'll implement designs. Other times you'll create them.\n\n**Stack:** TypeScript, React, Tanstack, Zustand, TailwindCSS, IndexedDB, Cloudflare Workers.\n\n**Who You Are:**\n\n**Minimum:**\n\n- 4+ years of frontend engineering with a portfolio of complex web apps you've shipped. We want to see multiplayer experiences, apps handling large data with sophisticated fetching and caching, or work with server-sent events (SSE).\n- You love React and deeply understand state management. You know when to useMemo, how callbacks work, the component lifecycle, and you write beautiful, reusable components. You recognize when props are being drilled through multiple layers and should be lifted into context or Zustand instead.\n- You're comfortable owning a full-stack feature. You can do the DB migration, write the route in the backend, fetch on the frontend, and create the UI for it.\n- Product sense and design intuition: you can take a rough product direction, sketch an interaction, and ship something that feels right.\n- You care about performance. You know when to cache, when to refetch stale data, and how to optimistically update the UI. You notice duplicated network requests. You care about the app feeling snappy and responsive.\n- You make design decisions: you'll need to own some UX decisions, create simple designs when needed, and unblock yourself.\n- High autonomy, low ego: you don't wait for permission or perfect specs. You ship, gather feedback, and iterate.\n- You care about craft: details like loading states, empty states, error messages, keyboard shortcuts. The 1000 small decisions that make software feel good.\n\n**Bonus (but not required):**\n\n- Experience with multiplayer apps (Y.js, Automerge, CRDTs, or similar real-time collaboration frameworks).\n- Built interfaces for LLM-based tools (streaming responses, handling uncertainty, progressive disclosure).\n- Experience with local-first architectures (IndexedDB, service workers, sync strategies).\n- Design background or strong visual sense: you can make things look good without a designer.\n- Been a founding frontend engineer and established standards from scratch.\n\n**Compensation & Benefits:**\n\nBase salary: $180K–$240K + meaningful early-stage equity + health, dental, 401(k), considerable PTO, gym budget, lunch.\n\n## **The Process:**\n\nWe keep our process simple. Exceptional candidates go from first touch to offer within 2 weeks.\n\n1. **Application:** Submit your resume and answer a few short questions.\n2. **15-minute intro call:** Align on location, motivation, and logistics. If it's a go, we move fast from here.\n3. **System design interview:** A deep dive into how you think and architect systems. We'll walk through a real Wordware problem together.\n4. **Final conversation:** We answer your questions and scope out the work trial.\n5. **Work trial:** Paid, in person, usually a few days to two weeks. You work on a real project with us. See how we work, see if it fits, both sides."
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "weak",
+    "score": 30,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "React/TypeScript and AI overlap is real, but the posting demands 4+ years of frontend depth and Bay Area relocation before start."
+}

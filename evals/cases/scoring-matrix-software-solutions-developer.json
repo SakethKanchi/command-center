@@ -1,0 +1,66 @@
+{
+  "id": "scoring-matrix-software-solutions-developer",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "8e3c1903-ba82-46cd-adbf-1188f37a2746",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "8e3c1903-ba82-46cd-adbf-1188f37a2746",
+      "title": "Software Solutions Developer",
+      "employer": "Matrix Design Group Inc.",
+      "location": "San Antonio, Denver, Colorado Springs, Phoenix or Remote",
+      "isRemote": true,
+      "salary": "USD 90000-100000 / yearly",
+      "jobLevel": null,
+      "jobDescription": "***Matrix has been named a Zweig Group 2026 Best Firm to Work For!***\n\n \n\nMatrix Design Group, Inc. is an award winning, employee-owned engineering, planning, and consulting firm. As an employee-owned company we are committed to fostering, cultivating, and preserving a culture of diversity, respect, and excellence and provide innovative and sustainable solutions for our clients.\n\nWe have a friendly, collegial, cooperative atmosphere and offer a full range of benefits including an Employee Stock Ownership Plan (ESOP); medical, dental, vision, disability, and life insurance; holiday, vacation, and sick leave; training and education; and a 401(k) plan. Matrix employees are encouraged to participate in employee wellness programs, social committees, and community outreach programs.\n\n **Salary Range:** $90,000 to $100,000 Annually. Salary will be dependent upon experience.\n\n**Location:** San Antonio, Denver, Colorado Springs, Phoenix or Remote\n\n **Job Summary:**\n\nDevelops and supports secure digital solutions for Matrix's commercial and federal clients, including the Department of War. Works with senior technical leaders and multidisciplinary teams to translate client requirements into applications, automated workflows, integrations, dashboards, and collaboration tools. Contributes throughout the software delivery lifecycle and delivers reliable, well-documented solutions on time and within budget.\n\n**Essential Functions:**\n\n* Serve as Matrix's Software Solutions Developer\n* Support continuous process improvement and business process reengineering projects through process mapping; data collection, analysis, \\& visualization; and development of digital solutions\n* Support proposal development by providing content for the approach, schedule, or other sections as assigned in accordance with the request for proposal or request for qualifications\n* Support project execution, including budgeting, scheduling, organizing teams, prioritizing multiple projects and deadlines, quality assurance, invoicing, preparing reports, developing technical documents and presentations, and contributing to other project deliverables.\n* Meet with clients and their representatives, individually or as part of a team, to present results, resolve issues, answer questions, and maintain strong relationships.\n* Support the planning and facilitation of virtual and in-person engagements with project stakeholders focused on visioning, brainstorming, and solving complex challenges.\n\n**Technical Responsibilities:**\n\n* Develop, test, deploy, document, and sustain secure applications, automated workflows, dashboards, portals, and collaboration solutions under the direction of senior technical leaders.\n* Participate throughout the secure software development lifecycle (SSDLC), including discovery, requirements, design, development, testing, deployment, sustainment, and retirement, using Agile practices.\n* Use Azure DevOps, Git, code reviews, issue tracking, and CI/CD pipelines to support repeatable, high-quality software delivery.\n* Develop modern front-end and back-end application features using technologies such as C#, .NET, React, TypeScript, and Python.\n* Configure and deliver Microsoft Power Platform solutions using Power Apps, Power Automate, and Copilot Studio, together with SharePoint Online and Power BI solutions.\n* Develop SQL Server data structures and queries and build REST APIs and integrations that connect business systems and produce reliable, actionable information.\n* Contribute to scalable enterprise solutions supporting more than 100 users and multiple business functions while following approved reference architectures, application-governance requirements, development standards, and platform lifecycle procedures.\n* Support solutions using Palantir Foundry/AIP, Atlassian Jira and Confluence, or comparable enterprise platforms as project requirements dictate.\n* Apply application-security, Zero Trust, identity and access management, data-governance, and CUI-protection practices in accordance with applicable NIST SP 800-171, CMMC, FedRAMP, and DFARS 252.204-7012 requirements.\n* Evaluate and use approved AI-assisted development tools and contribute to secure AI-enabled business solutions within established governance and security boundaries.\n* Troubleshoot technical issues, perform quality checks, maintain documentation, support user acceptance and training, and collaborate with technical and nontechnical stakeholders through delivery and sustainment.\n\n**Desired Competencies:**\n\n* Practical experience developing, testing, deploying, and supporting business applications in a team environment.\n* Working knowledge of Microsoft Azure, Azure DevOps, Git, and CI/CD pipeline development.\n* Proficiency with modern application-development frameworks, integration patterns, APIs, front-end and back-end technologies, and cloud-native architectures, including experience with two or more of the following: C#, .NET, React, TypeScript, and Python.\n* Experience with Microsoft Power Platform, including Power Apps and Power Automate; experience with Copilot Studio, SharePoint Online, or Power BI is preferred.\n* Experience with SQL Server, data structures, REST APIs, and systems integration.\n* Familiarity with enterprise architecture, application governance, development standards, platform lifecycle management, SSDLC, application security, Zero Trust, identity and access management, and protection of CUI.\n* Interest or experience in AI-assisted development tools and secure AI-enabled business solutions.\n* Ability to translate business requirements into practical technical solutions, work effectively in Scrum or Kanban teams, communicate clearly with clients and teammates, manage competing priorities, and travel to project sites or other Matrix offices as needed.\n\n**Supervisory Responsibilities:**\n\n* This position has no direct supervisory responsibilities. The employee may provide peer support, participate in code reviews, and help onboard new team members as assigned.\n\n**Education and Experience:**\n\n* Bachelor's degree in computer science, software engineering, information systems, or a related field of study. Relevant professional experience may be considered in lieu of a degree.\n* Minimum of 3 years of progressively responsible software or application-development experience, including participation in delivery from requirements and design through deployment and sustainment.\n* Demonstrated experience delivering one or more of the following: business applications, automated workflows, custom forms, systems integrations, dashboards, or enterprise collaboration portals.\n* Experience working in a federal, defense, or other regulated environment is preferred. Must be able to obtain and maintain a U.S. Government security clearance; a current clearance is a plus.\n* Valid driver's license, in conjunction with successfully passing the Company's MVR screening.\n\n**Preferred Certifications:**\n\n* Microsoft Certified: Power Platform Developer or Azure Developer Associate.\n* Scrum Master or SAFe Agilist.\n* CompTIA Security+ or Palantir Certification.\n\n **Other Duties:**\n\nPlease note this job description is not designed to cover or contain a comprehensive listing of activities, duties or responsibilities that are required of the employee for this job. Duties, responsibilities, and activities may change at any time with or without notice.\n\n**Physical Demands:**\nWhile performing the duties of this job, the employee is regularly required to sit; use hands to finger, handle, or feel; reach with hands and arms and talk or hear. The employee is occasionally required to stand; walk and stoop, kneel, crouch, or crawl. The employee must occasionally lift and/or move up to 10 pounds. \n\nThe noise level in the work environment is usually moderate. \n\nMatrix Design Group, Inc. is an Equal Opportunity Employer. All qualified applicants will receive consideration for employment without regard to race, gender, color, religion, sex, national origin, or protected veteran status, and will not be discriminated against based on disability. \n\nThe final agreed upon compensation is based on individual education, qualifications, experience, and work location. \n\nAny applicant with a qualifying physical or mental disability who believes s/he requires a reasonable accommodation for any part of the application process should contact us at [redacted] for assistance. **How to Apply:**\nPlease apply online at http://www.matrixdesigngroup.com/careers"
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "moderate",
+    "score": 42,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Remote-eligible with a published band, but the primary stack is C#/.NET plus Microsoft Power Platform and SQL Server for federal/defense clients, and the candidate holds no clearance."
+}

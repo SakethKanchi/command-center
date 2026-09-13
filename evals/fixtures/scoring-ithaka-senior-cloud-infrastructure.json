@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-ithaka-senior-cloud-infrastructure",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 55,
+    "reason": "The candidate matches the technical skills (Python, Cloud, Infrastructure as Code) but falls short on the required 5+ years of professional experience, currently having only about 2.5 years."
+  }
+}

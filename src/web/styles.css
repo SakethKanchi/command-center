@@ -1,0 +1,427 @@
+@import "tailwindcss";
+
+/*
+ * Command Center is an operations console: a dim room, a projector, and one
+ * question to answer at a glance — which external system did each step touch.
+ * Colour therefore carries data, not mood. Six fixed hues are reserved for the
+ * six systems the agent can talk to, and exactly one brand accent (signal
+ * amber) is left over for things a human can act on. Status is carried by icon
+ * and by whether a rail node is filled, never by a seventh hue, because the
+ * system hues already own green and red.
+ */
+@theme {
+  --color-deck: #0b131d;
+  --color-panel: #101c28;
+  --color-panel-hi: #16242f;
+  --color-ridge: #1e2f40;
+  --color-ridge-hi: #2c4459;
+  --color-ink: #eaf1f8;
+  --color-ink-dim: #92a7bd;
+  --color-ink-faint: #62798f;
+
+  --color-signal: #ffc94d;
+  --color-alarm: #ff6257;
+  --color-pass: #3ddc97;
+
+  --color-app-local: #8296ab;
+  --color-app-boards: #4ea8ff;
+  --color-app-llm: #b483ff;
+  --color-app-gmail: #ff6f61;
+  --color-app-sheets: #21c98a;
+  --color-app-notion: #f0e6d2;
+
+  /* Archivo carries a width axis; the console voice is the wide cut. IBM Plex
+     Sans and Mono handle prose and the machine-generated identifiers. */
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-deck);
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-deck);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer components {
+  /* ── voices ─────────────────────────────────────────────────────────── */
+
+  .u-display {
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .u-numeral {
+    font-family: var(--font-display);
+    font-stretch: 118%;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+  }
+
+  /* Machine identifiers — tool names, ids, durations — keep the mono voice so
+     they never read as prose the agent wrote. */
+  .u-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+  }
+
+  .u-mono {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── surfaces ───────────────────────────────────────────────────────── */
+
+  .panel {
+    background-color: var(--color-panel);
+    border: 1px solid var(--color-ridge);
+    border-radius: var(--radius-md);
+  }
+
+  .btn {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    /* Floor, not a fixed height: a 24px target survives a trackpad and a
+       thumb even when the label is a single glyph. */
+    min-height: 28px;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 1px solid var(--color-ridge-hi);
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    padding: 0.4rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-ink-dim);
+    cursor: pointer;
+    transition:
+      background-color 120ms ease,
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+
+  .btn:hover:not(:disabled) {
+    background-color: var(--color-panel-hi);
+    border-color: var(--color-ink-faint);
+    color: var(--color-ink);
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .btn-primary {
+    border-color: var(--color-signal);
+    color: var(--color-signal);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--color-signal);
+    border-color: var(--color-signal);
+    color: var(--color-deck);
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    border-color: var(--color-alarm);
+    color: var(--color-alarm);
+    background-color: transparent;
+  }
+
+  /* ── system identity ────────────────────────────────────────────────────
+     One rule per system. Everything downstream reads --app, so a chip, a rail
+     node and a duration bar are guaranteed to agree on the hue. */
+  [data-app="local"] {
+    --app: var(--color-app-local);
+  }
+  [data-app="job_boards"] {
+    --app: var(--color-app-boards);
+  }
+  [data-app="llm"] {
+    --app: var(--color-app-llm);
+  }
+  [data-app="gmail"] {
+    --app: var(--color-app-gmail);
+  }
+  [data-app="google_sheets"] {
+    --app: var(--color-app-sheets);
+  }
+  [data-app="notion"] {
+    --app: var(--color-app-notion);
+  }
+
+  .app-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid color-mix(in oklab, var(--app) 38%, transparent);
+    border-radius: var(--radius-xs);
+    background-color: color-mix(in oklab, var(--app) 15%, transparent);
+    padding: 0.1rem 0.35rem;
+    color: var(--app);
+    white-space: nowrap;
+  }
+
+  /* The signature: a colour-coded spine. Scanning it top to bottom is the
+     whole multi-app claim — each solid block is a different system, and a
+     hollow block is a step that never ran. */
+  .rail-node {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-xs);
+    background-color: var(--app);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--app) 55%, transparent);
+  }
+
+  .rail-node[data-filled="false"] {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1.5px
+      color-mix(in oklab, var(--app) 60%, transparent);
+  }
+
+  .rail-node[data-ring="alarm"] {
+    box-shadow: 0 0 0 3px
+      color-mix(in oklab, var(--color-alarm) 45%, transparent);
+  }
+
+  .rail-node[data-ring="signal"] {
+    box-shadow: 0 0 0 3px
+      color-mix(in oklab, var(--color-signal) 45%, transparent);
+    animation: rail-pulse 1.8s ease-in-out infinite;
+  }
+
+  .rail-line {
+    flex: 1 1 auto;
+    width: 2px;
+    min-height: 0.75rem;
+    background-color: color-mix(in oklab, var(--app) 40%, transparent);
+  }
+
+  .system-block {
+    height: 12px;
+    border-radius: 1px;
+    background-color: var(--app);
+  }
+
+  .dur-bar {
+    height: 3px;
+    border-radius: 1px;
+    background-color: color-mix(in oklab, var(--app) 62%, transparent);
+  }
+
+  /* ── data rows ──────────────────────────────────────────────────────── */
+
+  .lane-row {
+    border-top: 1px solid var(--color-ridge);
+    transition: background-color 120ms ease;
+  }
+
+  .lane-row:hover {
+    background-color: var(--color-panel-hi);
+  }
+
+  .meter {
+    height: 6px;
+    width: 56px;
+    border-radius: 1px;
+    background-color: var(--color-ridge-hi);
+    overflow: hidden;
+  }
+
+  .meter-fill {
+    height: 100%;
+    background-color: var(--color-ink-faint);
+  }
+
+  .meter-fill[data-strong="true"] {
+    background-color: var(--color-signal);
+  }
+
+  .tab {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: baseline;
+    gap: 0.4rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    padding: 0.55rem 0.1rem;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-ink-faint);
+    cursor: pointer;
+  }
+
+  .tab:hover {
+    color: var(--color-ink-dim);
+  }
+
+  .tab[aria-selected="true"] {
+    border-bottom-color: var(--color-signal);
+    color: var(--color-ink);
+  }
+
+  .spin {
+    animation: spin 900ms linear infinite;
+  }
+
+  /* ── shell ──────────────────────────────────────────────────────────── */
+
+  /* Off-screen until focused, then a real amber chip over the sidebar. The
+     first Tab on every page has to be able to skip the nav. */
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 50;
+    transform: translateY(-250%);
+    border: 1px solid var(--color-signal);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-deck);
+    padding: 0.4rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-signal);
+    transition: transform 120ms ease;
+  }
+
+  /* `:focus`, not `:focus-visible`: a skip link is unreachable except by
+     keyboard or a deliberate click, and `:focus-visible` misses a focus moved
+     by script — which is exactly how a skipped-to link gets focused back. */
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-left: 2px solid transparent;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    /* 34px tall at the default font size: comfortably past the 24px floor
+       even on a touch screen. */
+    min-height: 34px;
+    padding: 0.35rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-ink-dim);
+    text-decoration: none;
+    transition:
+      background-color 120ms ease,
+      color 120ms ease;
+  }
+
+  .nav-item:hover {
+    background-color: var(--color-panel-hi);
+    color: var(--color-ink);
+  }
+
+  /* Driven by aria-current rather than a class, so the thing the screen reader
+     announces and the thing the eye sees can never disagree. */
+  .nav-item[aria-current="page"] {
+    border-left-color: var(--color-signal);
+    background-color: var(--color-panel);
+    color: var(--color-ink);
+  }
+
+  .nav-count {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-faint);
+  }
+
+  /* ── loading ────────────────────────────────────────────────────────── */
+
+  /* Opacity only: a width or background-position animation on a dozen blocks
+     is the one thing on this page that would drop frames. */
+  .skel {
+    display: block;
+    border-radius: var(--radius-xs);
+    background-color: var(--color-ridge);
+    animation: skel-pulse 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes rail-pulse {
+  50% {
+    box-shadow: 0 0 0 6px
+      color-mix(in oklab, var(--color-signal) 18%, transparent);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes skel-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-node[data-ring="signal"],
+  .skel,
+  .spin {
+    animation: none;
+  }
+
+  /* The nav and skip link are the only other moving parts; both become
+     instant rather than disappearing. */
+  .nav-item,
+  .skip-link,
+  .btn {
+    transition-duration: 1ms;
+  }
+}

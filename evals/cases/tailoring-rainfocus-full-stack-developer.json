@@ -1,0 +1,74 @@
+{
+  "id": "tailoring-rainfocus-full-stack-developer",
+  "kind": "tailoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "7803f97b-1d4d-4291-b1b4-97d5848deb03",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "7803f97b-1d4d-4291-b1b4-97d5848deb03",
+      "title": "Full Stack Developer",
+      "employer": "RainFocus",
+      "location": "USA",
+      "isRemote": true,
+      "salary": null,
+      "jobLevel": null,
+      "jobDescription": "RainFocus, one of the most innovative software companies in the heart of Utah's Silicon Slopes, is in search of an exceptional Full Stack Developer. \n About RainFocus \n RainFocus cares about its employees, customers, and the world in which we live. Our rapidly-growing team serves Fortune 500 companies like Adobe, Cisco, IBM, Oracle, VMware, and others to prepare and execute in-person, virtual, and hybrid events, across the world. Those events are delivered through our industry-disrupting software platform, with groundbreaking business intelligence, to elevate the attendee experience, streamline event operations, and accelerate marketing results. We are well-funded, growing fast, and building a company that is changing the market — it will be challenging, fun and exciting.\n About the Role \n As a Full Stack Developer, you will develop enterprise-grade web applications using Java and React.\n We need collaborative, energetic team members who are capable of becoming experts in RainFocus products, industry best practices and who work well within small, focused teams. \n This role sits at the heart of some of our most ambitious work: blending AI with intuitive product design to streamline complex configuration tasks and enable more personalized experiences. You’ll work closely across-functions to turn AI ideas into working solutions.\n RainFocus is looking for a Full Stack Developer to help us build the next generation of tools that power some of the largest events in the world. You’ll be joining a fast-moving, cross-functional team focused on delivering smarter, AI-powered experiences for our internal teams and event organizers. \n We’re looking for someone who’s collaborative, curious, and ready to build things that don’t exist yet. \n Essential Responsibilities: \n Develop and maintain our core product set with a focus on usability, security, and scalability\n Collaborate closely with Product Management and UX to build thoughtful, client-facing experiences\n Build and iterate on advanced prototypes that integrate LLMs, APIs, and retrieval pipelines\n Implement full-stack features—from database schema and backend services to frontend components and real-time user interactions\n Qualifications: \n Have a strong technical background, including 2+ years of experience working on full stack code bases and doing anything it takes to solve problems and delight users.\n Experience with Claude Code, Cursor, GitHub Copilot or other AI-Assisted Engineering tools used to develop software products\n Experience working with LLMs, AI agents, or RAG architectures\n Experience peer reviewing code while providing feedback and improvements\n Very strong written and verbal communication skills\n Experience with Agile Software Development methodologies\n Experience in Object-Oriented design and programming.\n Experience in RDBMS (MySQL, Oracle, MSSQL, etc.) including database design and advanced SQL\n Experience with front-end development using a modern JavaScript framework such as React, Angular, or Vue.\n Able to make effective trade-offs in regards to both engineering and product requirements, while balancing short term and long term needs\n Strong expertise with backend systems in service-oriented architectures\n Preferred Skills: \n Familiarity with LangChain, LangGraph or other AI Agentic frameworks\n Experience driving zero-to-one development of key technical capabilities\n Strong problem-solver who can untangle complex systems, find the root cause, and fix issues without duct tape solutions.\n Creative thinker who spots opportunities for smarter solutions and isn’t afraid to pitch bold ideas that actually move the needle.\n Experience with Struts2 MVC, Spring Framework\n Experience integrating with 3rd party systems via APIs\n Prior experience as a team lead\n Personal Characteristics: \n The best candidates for this position will thrive at RainFocus not just because of their technical skills, but because of how they show up. They’re energized by solving hard problems, working with smart teammates, and figuring things out without a step-by-step manual.\n They’ll need to be comfortable in a fast-paced, evolving environment where priorities shift and curiosity is rewarded.\n We’re looking for someone who is: A strong communicator who keeps others in the loop and asks great questions\n Self-motivated, with a bias toward action and ownership A collaborative team player who helps others level up\n Naturally curious—driven to understand how things work and how to make them better\n Comfortable with ambiguity and unafraid to make decisions when things are messy\n Open to feedback, quick to learn, and always improving\n Location:\n This remote role can be located anywhere in the United States. Travel may be required.\n Why work at RainFocus? \n At RainFocus we delight millions of attendees at large-scale events by delivering better insights, experiences, and marketing. \n As a member of the RainFocus team, you will have the opportunity to experience first-hand the impact of our platform at events around the world. Additionally, RainFocus offers competitive salaries, competitive benefits, 401k and generous PTO. \n What are you waiting for? Apply today! We need more talented, hard-working, fun-loving team members just like yourself!"
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "faithful",
+    "score": 100,
+    "tolerance": 25,
+    "requiredKeywords": ["React", "Java", "SQL", "full stack"],
+    "forbiddenFabrications": [
+      "expert in Java",
+      "10 years",
+      "PhD",
+      "Kotlin",
+      "Fortune 500 employer"
+    ],
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Java-backend posting against a Python/Node candidate. Java must be acknowledged because the posting is built on it, but claimed expertise would be a fabrication."
+}

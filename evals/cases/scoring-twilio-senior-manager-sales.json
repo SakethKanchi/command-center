@@ -1,0 +1,66 @@
+{
+  "id": "scoring-twilio-senior-manager-sales",
+  "kind": "scoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "34eff6f3-8664-4170-991f-837983a36744",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "34eff6f3-8664-4170-991f-837983a36744",
+      "title": "Senior Manager, Sales - Twilio.org",
+      "employer": "Twilio",
+      "location": "USA",
+      "isRemote": true,
+      "salary": null,
+      "jobLevel": null,
+      "jobDescription": "Who we are \n At Twilio, we’re shaping the future of communications, all from the comfort of our homes. We deliver innovative solutions to hundreds of thousands of businesses and empower millions of developers worldwide to craft personalized customer experiences.\n Our dedication to remote-first work , and strong culture of connection and global inclusion means that no matter your location, you’re part of a vibrant team with diverse experiences making a global impact each day. As we continue to revolutionize how the world interacts, we’re acquiring new skills and experiences that make work feel truly rewarding. Your career at Twilio is in your hands. .\n Hiring and how we work \n We use Artificial Intelligence (AI) to help make our hiring process efficient. That said, every hiring decision is made by real Twilions! \n Also, while we are a remote-first company, you may be asked to report in person on an ad-hoc basis for team gatherings, functional off-sites or customer meetings. .\n See yourself at Twilio \n Join the team as Twilio’s next Senior Manager, Strategic Sales, Social Impact.\n About the job \n This position is needed to lead our growing Hybrid New Business / Strategic Sales team supporting our Social Impact customers to deliver life changing services with Twilio. The right person for this role is a go-getter who wants to develop and identify new revenue opportunities with existing enterprise logos in the not-for-profit, healthcare, and social impact space as well as land net new non-profit enterprise companies . As a sales leader, you will be managing and developing a global team of quota-carrying AEs. You will participate and lead in client meetings as well as work cross-functionally with stakeholders and corporate resources as required. You will be responsible for ongoing mentoring and development of the sales team which includes recruiting, hiring and training new team members on the sales process. In this role, you will report on sales activity and forecast to senior sales management.\n Responsibilities \n In this role, you’ll:\n Support the successful sale of multi-product solutions to existing customers and successfully onboard large enterprise customers with their first set of use cases\n Retain and grow existing revenue through strategic account management \n Generate new pipeline through cross-sell & up-sell motions and driving consistent pipeline generation through outbound SDR-led campaigns\n Collaborate with your AEs and cross functional business partners to land complex deals and advance relationships with the C-Suite. \n Run a daily/weekly/monthly operating cadence that drives accountability and supports achievement of quarterly revenue and sales targets. \n Develop and share best practices across the entire Twilio.org team\n Qualifications \n Twilio values diverse experiences from all kinds of industries, and we encourage everyone who meets the required qualifications to apply. If your career is just starting or hasn't followed a traditional path, don't let that stop you from considering Twilio. We are always looking for people who will bring something new to the table!\n [CANDIDATES MUST MEET ALL REQUIRED QUALIFICATIONS IN THE JOB DESCRIPTION. IF ANY OF THESE QUALIFICATIONS CHANGE DURING THE HIRING PROCESS, THE JD MUST BE REVISED TO REFLECT THE NEW REQUIREMENTS] \n *Required: \n A leader who lives the Twilio Magic and has a demonstrated track record of success. You should feel comfortable selling a platform solution and experience in the Contact Center, cPaaS, or Data/Martech space is helpful.\n Customer-focused and metrics driven with a track record of coaching & developing account executives. \n Experience hiring senior/enterprise-level account executives and staying on top of performance management. \n Ability to navigate complex organizations as well as plan and execute EBRs. \n Our champions & contacts are often application owners, software engineering leaders, product managers, entrepreneurs, and line of business owners so you must love talking to all different types of customers.\n Location \n Focus on Tier 3 with option to hire Tier 2 for the right candidate. East Coast preferred. \n This role will be remote, but is not eligible to be hired in CT, NJ, NY, WA, PA or the surrounding areas of San Francisco, CA, Oakland, CA, or San Jose, CA\n Travel \n We prioritize connection and opportunities to build relationships with our customers and each other. For this role, approximately 30-40% travel is anticipated to help you connect in-person in a meaningful way. \n What We Offer \n Working at Twilio offers many benefits, including competitive pay, generous time off, ample parental and wellness leave, healthcare, a retirement savings program, and much more. Offerings vary by location.\n Compensation \n *Please note the salary range information provided applies only to candidates residing in California, Colorado, Hawaii, Illinois, Maryland, Massachusetts, Minnesota, New Jersey, New York, Vermont, Washington D.C., and Washington State due to local requirements. Compensation for candidates in other locations will be discussed during the hiring process. Please note that hiring for this role is not restricted to the locations listed above. \n The estimated pay ranges for this role are as follows:\n Based in Colorado, Hawaii, Illinois, Maryland, Massachusetts, Minnesota, Vermont or Washington D.C. : $158,632.00 -$198,290.00\n Based in New York, New Jersey, Washington State, or California (outside of the San Francisco Bay area): $167,440.00 - $209,300.00\n Based in the San Francisco Bay area, California: $176,256.00 - $220,320.00\n This role may be eligible to participate in Twilio’s equity plan and corporate bonus plan. All roles are generally eligible for the following benefits: health care insurance, 401(k) retirement account, paid sick time, paid personal time off, paid parental leave.\n The successful candidate’s starting salary will be determined based on permissible, non-discriminatory factors such as skills, experience, and geographic location.\n Application deadline information (required for ALL US jobs) \n Applications for this role are intended to be accepted until 9/28 but may change based on business needs. \n Twilio thinks big. Do you? \n We like to solve problems, take initiative, pitch in when needed, and are always up for trying new things. That's why we seek out colleagues who embody our values — something we call Twilio Magic . Additionally, we empower employees to build positive change in their communities by supporting their volunteering and donation efforts.\n So, if you're ready to unleash your full potential, do your best work, and be the best version of yourself, apply now! If this role isn't what you're looking for, please consider other open positions. \n . \n Stay alert to recruitment fraud \n We care about your safety. Scammers sometimes impersonate Twilio recruiters through fake job postings, emails, websites, or messages. Please ensure you are engaging with an official @ twilio.com email address. We will never ask for payment, gift cards, cryptocurrency, or banking information during the recruiting process. We do not make job offers without a formal interview process or conduct interviews exclusively through text-based messaging apps. .\n Twilio is proud to be an equal opportunity employer. We do not discriminate based upon race, religion, color, national origin, sex (including pregnancy, childbirth, reproductive health decisions, or related medical conditions), sexual orientation, gender identity, gender expression, age, status as a protected veteran, status as an individual with a disability, genetic information, political views or activity, or other applicable legally protected characteristics. We also consider qualified applicants with criminal histories, consistent with applicable federal, state and local law. Qualified applicants with arrest or conviction records will be considered for employment in accordance with the Los Angeles County Fair Chance Ordinance for Employers and the California Fair Chance Act. Additionally, Twilio participates in the E-Verify program in certain locations, as required by law."
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "reject",
+    "score": 4,
+    "tolerance": 10,
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Sales leadership over quota-carrying AEs at a company whose engineering brand is attractive. Zero role overlap; the floor case for the scale."
+}

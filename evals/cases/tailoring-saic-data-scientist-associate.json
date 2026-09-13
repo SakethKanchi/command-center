@@ -1,0 +1,74 @@
+{
+  "id": "tailoring-saic-data-scientist-associate",
+  "kind": "tailoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "e1a8b216-4a68-4758-93be-175db8900583",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "e1a8b216-4a68-4758-93be-175db8900583",
+      "title": "Data Scientist Associate",
+      "employer": "SAIC",
+      "location": "Upper Marlboro, MD, United States",
+      "isRemote": false,
+      "salary": null,
+      "jobLevel": null,
+      "jobDescription": "SAIC is seeking a Data Scientist Associate with a strong background in statistical data analysis using modern analytic tools and frameworks. Experience with techniques and platforms to create, manage, manipulate, and draw insight from large datasets is desired. The candidate will join the dynamic team at the Identity and Data Sciences Laboratory (IDSL). The IDSL is tasked with evaluating how new AI technologies can be best integrated into operational use-cases across the US government. We are investigating how AI systems can improve process efficiency and effectiveness, be optimally teamed with human operators, and detect fraud. Our engineers enjoy a great work-life balance and work in an environment that promotes learning and exploration.\n\n**Responsibilities:**\n\n- Work with senior data scientists to perform data management and analysis tasks.\n- Develop and apply extract, transform, load (ETL) data pipelines to create analytic datasets.\n- Perform exploratory data analyses (EDA) on analytic datasets.\n- Apply AI models to datasets for AI evaluation, data enrichment, prediction, or generation.\n- Work with senior scientists and engineers to develop statistically sound designs of experiment, defining and testing hypotheses.\n- Work with senior scientists and engineers to plan and execute comprehensive statistical analyses to generate quantitative results.\n- Maintain attention to detail and quality standards to ensure results are accurate and withstand technical scrutiny.\n- Contribute to ongoing data collection activities.\n\n**Required:**\n\n- A bachelor’s degree in mathematics, statistics, data science, or a comparable quantitative science,\n- 0-2 years applicable professional experience\n- **Ability to obtain and maintain a public trust requiring US Citizenship.**\n- Proficiency in programming statistical analyses, machine learning, and/or data mining (R, Python, or similar).\n- Proficiency in database technologies (SQL, NoSQL).\n- Familiarity with source control (e.g., Git).\n- Familiarity with common data formats (JSON, Parquet, XML, etc.).\n\n**Desired**:\n\n- Experience with techniques and platforms to manage, manipulate, and draw insight from large datasets (Spark, Hadoop, Databricks, etc.).\n- Understanding of scaling and performance of distributed/cloud systems (AWS).\n- Understanding of machine vision, generative AI, machine learning, automation, and scripting.\n- Strong communication skills, with the ability to present findings and recommendations to both technical and non-technical audiences."
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "faithful",
+    "score": 100,
+    "tolerance": 25,
+    "requiredKeywords": ["Python", "statistical", "ETL", "analysis"],
+    "forbiddenFabrications": [
+      "TS/SCI",
+      "Top Secret",
+      "active clearance",
+      "PhD",
+      "10 years"
+    ],
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Cleared-adjacent government posting: the strongest temptation in the set to invent a clearance, so the guardrail list is clearance-heavy."
+}

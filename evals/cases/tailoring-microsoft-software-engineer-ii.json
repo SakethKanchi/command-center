@@ -1,0 +1,74 @@
+{
+  "id": "tailoring-microsoft-software-engineer-ii",
+  "kind": "tailoring",
+  "source": {
+    "db": "data/jobs.db",
+    "table": "jobs",
+    "jobId": "1af56e28-7700-4782-bcdf-0680ab756f06",
+    "note": "real posting ingested by this repo's job-board pipeline; text normalised (markdown escapes and HTML stripped) but not rewritten"
+  },
+  "input": {
+    "job": {
+      "id": "1af56e28-7700-4782-bcdf-0680ab756f06",
+      "title": "Software Engineer II",
+      "employer": "Microsoft",
+      "location": "United States, Washington, Redmond",
+      "isRemote": false,
+      "salary": null,
+      "jobLevel": null,
+      "jobDescription": "**Overview**\n\nSecurity represents the most critical priorities for our customers in a world awash in digital threats, regulatory scrutiny, and estate complexity. Microsoft Security aspires to make the world a safer place for all. We want to reshape security and empower every user, customer, and developer with a security cloud that protects them with end to end, simplified solutions. The Microsoft Security organization accelerates Microsoft’s mission and bold ambitions to ensure that our company and industry is securing digital technology platforms, devices, and clouds in our customers’ heterogeneous environments, as well as ensuring the security of our own internal estate.\n\nAre you excited about building capabilities that help protect our customers from cybersecurity threats Making security incident detection and investigation autonomous Do you enjoy designing & building full-stack products using technologies ranging from backend services and APIs for optimized data retrieval and business logic, to LLM-based agentic workflows Do you thrive in a collaborative and data-driven environment Do you enjoy working with talented feature teams including software engineers, product managers, and security researchers If so, you'll love our collaborative, agile, and fun group with a startup mindset.\n\nWe are part of the Defender Experts product unit (part of Microsoft’s Security division). Our mission is to help protect our customers with innovative AI-powered & full-stack capabilities, combined with human-powered intelligence. We are committed to defending Microsoft customers from cyber-attacks as well as providing sophisticated capabilities to protect their digital assets. Making our customers succeed with our solutions is what excites us every day! We are a diverse group with people from a wide variety of backgrounds, prior work & life experiences. We foster a strong culture of learning & a collaborative work environment.\n\nWe are building multiple managed services/product offerings for Enterprise customers. Our products combine backend/cloud services, Big Data processing, state-of-the-art Generative AI/LLMs, and Agentic Workflows to deliver scalable and intelligent solutions. With an intuitive and easy-to-use UX, we aim to delight both our customers and security researchers. Our products offer a big growth opportunity for our division. We work with partners across the Microsoft Security division to innovate in our products and services.\n\nMicrosoft’s mission is to empower every person and every organization on the planet to achieve more. As employees we come together with a growth mindset, innovate to empower others, and collaborate to realize our shared goals. Each day we build on our values of respect, integrity, and accountability to create a culture of inclusion where everyone can thrive at work and beyond.\n\n**Responsibilities**\n\nWe are looking for a Software Engineer II to join the engineering team in the Defender Experts Organization. Key responsibilities include the following.\n\n1. - Design, implement and deploy highly scalable real time data processing cloud services utilizing Azure services.\n - Rapidly prototype and experiment with full stack features that utilize Web API, React based front end etc.\n - Help the team in all aspects of building cloud systems from inception to productization to monitoring in production.\n - Lead, inspire, and motivate engineering teams as a mentor and technical leader to create a culture where engineers thrive, grow, and innovate in a high-performance environment.\n - Lead or participate in design reviews to evaluate technology options, review peer code for adherence to best practices, leverage AI in building software and contribute to and refine documentation to improve engineering efficiency.\n - Collaborate with cross-functional teams to integrate Security for AI and AI for Security, enhancing our threat detection and response capabilities.\n\n**Qualifications**\n\n**Required Qualification:**\n\n- Bachelor's degree in Computer Science or related technical field AND 2+ years technical engineering experience with coding in languages including, but not limited to, C, C++, C, Java, JavaScript, or Python\n \n - OR equivalent experience\n\n**Other Requirements:** Ability to meet Microsoft, customer and/or government security screening requirements are required for this role. These requirements include, but are not limited to the following specialized security screenings:\n\n1. - **Microsoft Cloud Background Check:** This position will be required to pass the Microsoft Cloud background check upon hire/transfer and every two years thereafter.\n\n**Preferred Qualifications:**\n\n1. - 2+ years of experience in cloud services or AI systems.\n - Experience building and shipping AI features for world-class production systems.\n - Experience building and shipping features that utilize frontend frameworks like React.\n - Hands on experience in programming languages such C, Java, C++, or equivalent programming languages.\n\nSoftware Engineering IC3 - The typical base pay range for this role across the U.S. is USD $102,100 - $202,200 per year. There is a different range applicable to specific work locations, within the San Francisco Bay area and New York City metropolitan area, and the base pay range for this role in those locations is USD $133,800 - $219,200 per year.\n\nCertain roles may be eligible for benefits and other compensation. Find additional benefits and pay information here:\n\nThis position will be open for a minimum of 5 days, with applications accepted on an ongoing basis until the position is filled.\n\n* * *\n\nMicrosoft is an equal opportunity employer. All qualified applicants will receive consideration for employment without regard to age, ancestry, citizenship, color, family or medical care leave, gender identity or expression, genetic information, immigration status, marital status, medical condition, national origin, physical or mental disability, political affiliation, protected veteran or military status, race, ethnicity, religion, sex (including pregnancy), sexual orientation, or any other characteristic protected by applicable local laws, regulations and ordinances. If you need assistance with religious accommodations and/or a reasonable accommodation due to a disability during the application process, read more about **requesting accommodations.**"
+    },
+    "candidate": {
+      "headline": "Full Stack AI Engineer",
+      "yearsExperience": 2,
+      "baseLocation": "Jersey City, NJ (NYC metro)",
+      "openTo": ["remote within the US", "hybrid or onsite in the NYC metro"],
+      "coreSkills": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "FastAPI",
+        "RAG (pgvector, BM25, hybrid retrieval, reranking)",
+        "LangChain",
+        "LLM agentic workflows",
+        "PostgreSQL",
+        "SQLite",
+        "Snowflake",
+        "Databricks",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "AWS",
+        "Azure",
+        "GCP",
+        "Pytest",
+        "Playwright"
+      ],
+      "notableGaps": [
+        "no security clearance",
+        "no Master's or PhD on record",
+        "limited Java, no C#/.NET",
+        "no COBOL/mainframe",
+        "no CUDA/GPU systems programming",
+        "no quota-carrying sales or MEP/CAD background"
+      ]
+    }
+  },
+  "expected": {
+    "label": "faithful",
+    "score": 100,
+    "tolerance": 25,
+    "requiredKeywords": ["Python", "AI", "security", "production"],
+    "forbiddenFabrications": [
+      "security clearance",
+      "PhD",
+      "COBOL",
+      "10 years",
+      "Microsoft employee"
+    ],
+    "provenance": "reference-graded-v1"
+  },
+  "notes": "Defender Experts posting. The tailored output must reach the security-product framing without inventing a clearance or a tenure the candidate does not have."
+}

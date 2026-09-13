@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-atc-ai-engineer-genai",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 68,
+    "reason": "Strong skills overlap in Python, RAG, vector stores, FastAPI, LangChain, and LLMs, plus solid deployment tooling. However, the candidate has ~2 years of experience vs. the 3+ years required, no stated Master's degree, and the role is onsite in Texas while the candidate is based in New Jersey with no remote indicator."
+  }
+}

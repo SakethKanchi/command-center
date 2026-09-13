@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-wordware-senior-ai-frontend",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 38,
+    "reason": "The role is a senior-level (4+ years required) frontend position in San Francisco, while the candidate has only ~2 years of experience and is based in New Jersey. Skills overlap on React/TypeScript and AI familiarity, but the seniority, location, and full-stack vs frontend specialization mismatch make this a weak fit. The candidate does not meet the minimum experience threshold or the in-person Bay Area location."
+  }
+}

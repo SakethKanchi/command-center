@@ -1,0 +1,68 @@
+{
+  "apiVersion": "2.2.16",
+  "jobCount": 4,
+  "lastUpdate": "2026-09-13T11:56:44+00:00",
+  "appliedFilters": {
+    "count": 10,
+    "geo": "usa",
+    "tag": "marketing"
+  },
+  "jobs": [
+    {
+      "id": 153180,
+      "url": "https://jobicy.com/jobs/153180-senior-product-marketing-manager-5",
+      "jobTitle": "Senior Product Marketing Manager",
+      "companyName": "Teramind",
+      "jobGeo": "USA",
+      "jobExcerpt": "The Role You'll own how Teramind is positioned, packaged, and sold.",
+      "jobDescription": "<p><strong>The Role</strong></p>\n<p>You'll own how Teramind is positioned, packaged, and sold. This is a senior, hands-on role at the center of our GTM engine.</p>",
+      "pubDate": "2026-09-13T11:56:44+00:00",
+      "salaryMin": 160000,
+      "salaryMax": 200000,
+      "salaryCurrency": "USD",
+      "salaryPeriod": "yearly"
+    },
+    {
+      "id": 152954,
+      "url": "https://jobicy.com/jobs/152954-marketing-operations-manager",
+      "jobTitle": "Marketing Operations Manager",
+      "companyName": "Cordance",
+      "jobGeo": "USA",
+      "jobExcerpt": "Cordance is dedicated to accelerating the growth of vertically focused business-to-business (B2B) software companies.",
+      "jobDescription": "<p>Cordance is dedicated to accelerating the growth of vertically focused business-to-business (B2B) software companies.</p>",
+      "pubDate": "2026-09-09T17:29:05+00:00",
+      "salaryMin": null,
+      "salaryMax": null,
+      "salaryCurrency": null,
+      "salaryPeriod": null
+    },
+    {
+      "id": 152874,
+      "url": "https://jobicy.com/jobs/152874-gtm-product-manager-marketing-operations",
+      "jobTitle": "GTM Product Manager - Marketing Operations",
+      "companyName": "Remote",
+      "jobGeo": "LATAM,  Canada,  USA",
+      "jobExcerpt": "About Remote Remote is solving modern organizations' biggest challenge - navigating global employment compliantly.",
+      "jobDescription": "<h3><strong>About Remote</strong></h3>\n<p>Remote is solving modern organizations' biggest challenge \u2013 navigating global employment compliantly with ease.</p>",
+      "pubDate": "2026-09-09T07:07:55+00:00",
+      "salaryMin": 132000,
+      "salaryMax": 147000,
+      "salaryCurrency": "USD",
+      "salaryPeriod": "yearly"
+    },
+    {
+      "id": 152943,
+      "url": "",
+      "jobTitle": "Content Marketing Manager",
+      "companyName": "NetBox Labs",
+      "jobGeo": "USA",
+      "jobExcerpt": "NetBox Labs is looking for a Content Marketing Manager to scale its integrated marketing.",
+      "jobDescription": "<p>NetBox Labs is looking for a Content Marketing Manager to scale its integrated marketing.</p>",
+      "pubDate": "2026-09-09T17:24:58+00:00",
+      "salaryMin": 105000,
+      "salaryMax": 115000,
+      "salaryCurrency": "USD",
+      "salaryPeriod": "yearly"
+    }
+  ]
+}

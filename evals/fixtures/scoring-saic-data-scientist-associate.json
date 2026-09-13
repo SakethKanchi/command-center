@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-saic-data-scientist-associate",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 42,
+    "reason": "Candidate has strong Python, AI/ML, and data skills relevant to the role, but the position is an entry-level data scientist associate (0-2 years) focused on statistical analysis and ETL for a US government contractor in Maryland, not a full-stack AI engineering role. The candidate's experience level is above the associate level, and the work is not remote."
+  }
+}

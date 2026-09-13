@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-twilio-senior-manager-sales",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 3,
+    "reason": "This is a senior sales manager position requiring experience leading quota-carrying account executives, which has zero alignment with the candidate's full stack AI engineering background and experience level."
+  }
+}

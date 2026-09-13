@@ -1,0 +1,12 @@
+{
+  "caseId": "scoring-ust-agentic-ai-multi-agent",
+  "kind": "scoring",
+  "recordedFrom": "job rows -> jobs.score, jobs.score_reason",
+  "recordedBy": "recorded job-scoring run (scoreJob)",
+  "model": "recorded-production-run",
+  "modelNote": "the job row carries no model id, so the provider/model that produced this output is not recoverable",
+  "output": {
+    "score": 18,
+    "reason": "The role requires deep systems-level and GPU/inference engine expertise (BIOS/FW, PCIe, CUDA, OpenVINO, kernel debugging) which the candidate does not have; while they have some RAG and LangChain experience, the core platform debug and performance engineering requirements are a significant mismatch. Location is onsite in Oregon (candidate is in NJ) with no remote work mentioned."
+  }
+}
