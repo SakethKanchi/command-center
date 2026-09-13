@@ -202,9 +202,13 @@ export async function extractPdfText(data: Uint8Array): Promise<PdfText> {
             cMapPacked: true,
           }),
     }).promise;
-  } catch {
+  } catch (error) {
+    // pdfjs reports genuinely different failures here — a truncated file, a
+    // password, a missing font asset — and collapsing them into one sentence
+    // left the run trace unactionable. Keep the cause.
+    const detail = error instanceof Error ? error.message : String(error);
     throw new PdfTextExtractionError(
-      "PDF file could not be read or is encrypted.",
+      `PDF file could not be read or is encrypted: ${detail}`,
     );
   }
 

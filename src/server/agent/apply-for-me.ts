@@ -7,12 +7,14 @@ import type {
   Job,
   OutboundEmailRequest,
 } from "@domain";
+import { providerAuthMode } from "@server/connectors/composio/service";
 import {
   pushCommandCenter,
   sendOutboundEmail,
 } from "@server/connectors/service";
 import { buildCommandCenterSnapshot } from "@server/connectors/snapshot";
 import { nowIso } from "@server/db";
+import { getConfig } from "@server/infra/config";
 import { badRequest, notFound, toAppError } from "@server/infra/errors";
 import { logger } from "@server/infra/logger";
 import type { LlmClient } from "@server/llm";
@@ -419,6 +421,31 @@ async function executePlan(
       },
     });
     if (drafted.execution.kind === "ok") draft = drafted.execution.output;
+
+    // Composio's Gmail takes an attachment only as a pre-uploaded S3 object,
+    // and that upload route rejects a consumer key outright — so on this
+    // transport the résumé cannot ride along as a file. Rather than fail the
+    // send or silently drop the résumé, mint the app's own tracked link and
+    // put it in the body: the recruiter still gets the résumé, and an open
+    // becomes a view count on the pipeline card.
+    if (
+      draft &&
+      draft.attachments &&
+      draft.attachments.length > 0 &&
+      providerAuthMode("gmail_send", { repos }) === "composio"
+    ) {
+      const baseUrl = getConfig().baseUrl;
+      const link = repos.resumeLinks.create({
+        jobId: job.id,
+        label: `${job.company} — résumé`,
+        destinationUrl: `${baseUrl}/api/jobs/${job.id}/resume.pdf`,
+      });
+      const { attachments: _unsupported, ...rest } = draft;
+      draft = {
+        ...rest,
+        body: `${draft.body}\n\nRésumé: ${baseUrl}/r/${link.token}`,
+      };
+    }
   }
 
   // --- 6. Send (approval gated) ------------------------------------------

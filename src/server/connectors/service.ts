@@ -20,6 +20,7 @@ import {
   ensureComposioNotionDatabases,
   ensureComposioSpreadsheet,
   providerAuthMode,
+  sendViaComposio,
 } from "./composio/service";
 import { readComposioState } from "./composio/state";
 import { resolveNotionDatabases } from "./notion";
@@ -428,6 +429,16 @@ export async function sendOutboundEmail(
   request: OutboundEmailRequest,
   deps: ConnectorDeps,
 ): Promise<OutboundEmailResult> {
+  // Gmail has two transports and the send path only knew about one, so a
+  // Composio-linked account failed with "no credentials" — a direct-OAuth
+  // message for an account that never uses direct OAuth. Branch on the same
+  // resolver the push path uses so the two cannot disagree.
+  if (providerAuthMode("gmail_send", { repos: deps.repos }) === "composio") {
+    return await sendViaComposio(request, {
+      repos: deps.repos,
+      ...(deps.fetchImpl === undefined ? {} : { fetchImpl: deps.fetchImpl }),
+    });
+  }
   const connector = loadConnected("gmail_send", "default", deps);
   const result = await outboundEmailAdapter.send(
     buildContext(connector, deps),
